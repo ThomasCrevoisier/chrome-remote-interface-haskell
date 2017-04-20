@@ -1,0 +1,38 @@
+name:                chrome-remote-interface-haskell
+version:             0.1.0.0
+-- synopsis:
+-- description:
+homepage:            https://github.com/githubuser/chrome-remote-interface-haskell#readme
+license:             BSD3
+license-file:        LICENSE
+author:              Author name here
+maintainer:          example@example.com
+copyright:           2017 Author name here
+category:            Web
+build-type:          Simple
+cabal-version:       >=1.10
+extra-source-files:  README.md
+
+executable chrome-remote-interface-haskell
+  hs-source-dirs:      src
+  main-is:             Main.hs
+  other-modules:       Chrome.DebuggingURL
+                     , Chrome.InspectablePage
+                     , Chrome.DebuggingMessage
+                     , Chrome.WSClient
+                     , Chrome.API.Page
+                     , Chrome.API.DOM
+  default-language:    Haskell2010
+  build-depends:       base >= 4.7 && < 5
+                     , http-client
+                     , aeson
+                     , websockets
+                     , network
+                     , url
+                     , text
+                     , mtl
+                     , bytestring
+                     , containers
+                     , async
+                     , transformers
+                     , random

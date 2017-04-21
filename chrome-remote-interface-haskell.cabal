@@ -36,3 +36,4 @@ executable chrome-remote-interface-haskell
                      , async
                      , transformers
                      , random
+                     , stm

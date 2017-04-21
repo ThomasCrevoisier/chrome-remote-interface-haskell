@@ -27,21 +27,31 @@ import Chrome.InspectablePage
 import Chrome.DebuggingMessage
 import Chrome.WSClient
 import Chrome.API.Page (navigate)
-import Chrome.API.DOM (getDocument, GetDocumentResponse(..), querySelector, Node(..), QuerySelectorResponse)
+import Chrome.API.DOM (
+  getDocument
+  , GetDocumentResponse(..)
+  , querySelector
+  , Node(..)
+  , QuerySelectorResponse
+  , querySelectorAll
+  , QuerySelectorAllResponse
+  )
 
 head' :: [a] -> Maybe a
 head' (x:_) = Just x
 head' _ = Nothing
 
-sampleCommands :: WSClient ()
+sampleCommands :: WSChannelsT ()
 sampleCommands = do
-  sendCmd $ navigate "http://github.com" :: WSClient (Maybe ())
-  doc <- sendCmd getDocument :: WSClient (Maybe GetDocumentResponse)
+  sendCmd' $ navigate "http://github.com" :: WSChannelsT (Maybe Value)
+  doc <- sendCmd' getDocument :: WSChannelsT (Maybe GetDocumentResponse)
+  liftIO $ print doc
+
   case doc of
     Nothing -> liftIO $ putStrLn "No document found :/"
     Just doc' -> do
-      node <- sendCmd $ querySelector (nodeId . root $ doc') "a" :: WSClient (Maybe QuerySelectorResponse)
-      liftIO $ print node
+      nodes <- sendCmd' $ querySelectorAll (nodeId . root $ doc') "a" :: WSChannelsT (Maybe QuerySelectorAllResponse)
+      liftIO $ print nodes
 
   return ()
 
@@ -51,4 +61,5 @@ main = do
   let firstPage = head' =<< pages
   case firstPage of
     Nothing -> putStrLn "No page found"
-    Just p -> onPage p sampleCommands
+    Just p -> do
+      onPage' p sampleCommands

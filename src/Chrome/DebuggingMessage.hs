@@ -17,6 +17,9 @@ data Command a = Command { _cmdMethod :: String
 
 data DebuggingMsg a = DebuggingMsg Int (Command a) deriving Show
 
+msgId :: DebuggingMsg a -> Int
+msgId (DebuggingMsg id' _) = id'
+
 instance ToJSON a => ToJSON (DebuggingMsg a) where
   toJSON (DebuggingMsg msgId cmd) = object [ "id" .= msgId
                                            , "method" .= _cmdMethod cmd

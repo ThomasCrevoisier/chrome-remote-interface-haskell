@@ -36,6 +36,15 @@ instance FromJSON QuerySelectorResponse where
 querySelector :: Int -> String -> Command QuerySelectorParam
 querySelector nId selector = Command "DOM.querySelector" $ QuerySelectorParam nId selector
 
+data QuerySelectorAllResponse = QuerySelectorAllResponse { _rNodeIds :: [Int] } deriving Show
+
+instance FromJSON QuerySelectorAllResponse where
+  parseJSON = withObject "response" $ \o -> QuerySelectorAllResponse
+                                            <$> o .: "nodeIds"
+
+querySelectorAll :: Int -> String -> Command QuerySelectorParam
+querySelectorAll nId selector = Command "DOM.querySelectorAll" $ QuerySelectorParam nId selector
+
 data GetDocumentResponse
   = GetDocumentResponse { root :: Node }
   deriving (Show, Generic)

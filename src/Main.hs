@@ -53,7 +53,7 @@ sampleCommands = do
       nodes <- sendCmd' $ querySelectorAll (nodeId . root $ doc') "a" :: WSChannelsT (Maybe QuerySelectorAllResponse)
       liftIO $ print nodes
 
-  sendCmd' $ navigate "http://github.com" :: WSChannelsT (Maybe Value)
+  listenToMethod "DOM.childNodeInserted"
 
   return ()
 

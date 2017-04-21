@@ -85,12 +85,14 @@ dupWSChannels = do
   (chanCmd, chanRes) <- ask
   liftIO . atomically $ (,) <$> dupTChan chanCmd <*> dupTChan chanRes
 
+-- TODO : remove it
 dupCmdChannel :: WSChannelsT WSChannels
 dupCmdChannel = do
   (chanCmd, chanRes) <- ask
   chanCmd' <- liftIO . atomically $ dupTChan chanCmd
   return (chanCmd', chanRes)
 
+-- TODO : remove it
 dupResChannel :: WSChannelsT WSChannels
 dupResChannel = do
   (chanCmd, chanRes) <- ask
@@ -105,16 +107,27 @@ sendCmd' cmd = do
   liftIO $ wait =<< async (waitResponse chanRes (msgId msg))
 
   where
+    waitResponse :: (FromJSON res) => TChan T.Text -> Int -> IO (Maybe res)
     waitResponse chanRes' id' = do
       res <- atomically $ readTChan chanRes'
       let decodedMsg = decode . B8.pack . T.unpack $ res
-      let decodedResponse = _resResult <$> decodedMsg
-      case _resId <$> decodedMsg of
-        Nothing -> waitResponse chanRes' id'
-        Just msgId -> if msgId == id'
-                         then pure decodedResponse
-                         else waitResponse chanRes' id'
+      case decodedMsg of
+        Just (Result result) -> if _resId result == id'
+                                  then return $ Just $ _resResult result
+                                  else waitResponse chanRes' id'
+        _ -> waitResponse chanRes' id'
 
+listenToMethod :: String -> WSChannelsT ()
+listenToMethod method = do
+  (chanCmd, chanRes) <- dupWSChannels
+  liftIO $ forever $ do
+    res <- atomically $ readTChan chanRes
+    let event = decode . B8.pack . T.unpack $ res :: Maybe (WSResponse Value)
+    case event of
+      Just (Event content) -> if _eventMethod content == method
+                                 then print content
+                                 else return ()
+      _ -> return ()
 
 wsServer :: InspectablePage -> WSChannelsT (Maybe ())
 wsServer page = case wsClientFromPage page of

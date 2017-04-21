@@ -43,7 +43,7 @@ head' _ = Nothing
 
 sampleCommands :: WSChannelsT ()
 sampleCommands = do
-  sendCmd' $ navigate "http://github.com" :: WSChannelsT (Maybe Value)
+  sendCmd' $ navigate "http://gitlab.com" :: WSChannelsT (Maybe Value)
   doc <- sendCmd' getDocument :: WSChannelsT (Maybe GetDocumentResponse)
   liftIO $ print doc
 
@@ -52,6 +52,8 @@ sampleCommands = do
     Just doc' -> do
       nodes <- sendCmd' $ querySelectorAll (nodeId . root $ doc') "a" :: WSChannelsT (Maybe QuerySelectorAllResponse)
       liftIO $ print nodes
+
+  sendCmd' $ navigate "http://github.com" :: WSChannelsT (Maybe Value)
 
   return ()
 

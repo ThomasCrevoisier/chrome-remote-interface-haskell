@@ -37,6 +37,8 @@ import Chrome.API.DOM (
   , QuerySelectorAllResponse
   )
 
+import qualified Chrome.API.Network as CN
+
 head' :: [a] -> Maybe a
 head' (x:_) = Just x
 head' _ = Nothing
@@ -53,9 +55,14 @@ sampleCommands = do
       nodes <- sendCmd' $ querySelectorAll (nodeId . root $ doc') "a" :: WSChannelsT (Maybe QuerySelectorAllResponse)
       liftIO $ print nodes
 
-  listenToMethod "DOM.childNodeInserted"
+  sendCmd' CN.enable :: WSChannelsT (Maybe Value)
+
+  listenToMethod CN.eventRequestWillBeSent printRequest
 
   return ()
+  where
+    printRequest :: CN.RequestEvent -> IO ()
+    printRequest (CN.RequestEvent (CN.Request url)) = liftIO $ print url
 
 main :: IO ()
 main = do

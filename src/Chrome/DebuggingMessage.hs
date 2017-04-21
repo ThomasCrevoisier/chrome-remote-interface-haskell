@@ -37,18 +37,19 @@ commandToMsg :: Command a -> IO (DebuggingMsg a)
 commandToMsg cmd = flip DebuggingMsg cmd <$> (abs <$> randomRIO (1, 2000000))
 
 data WSResponse a
-  = Event EventResponse
+  = Event (EventResponse a)
   | Result (DebuggingResponse a)
   deriving (Show, Generic)
 
 instance FromJSON a => FromJSON (WSResponse a) where
   parseJSON v = (Event <$> parseJSON v) <|> (Result <$> parseJSON v)
 
-data EventResponse = EventResponse { _eventMethod :: String } deriving Show
+data EventResponse a = EventResponse { _eventMethod :: String, _eventContent :: a } deriving Show
 
-instance FromJSON EventResponse where
+instance FromJSON a => FromJSON (EventResponse a) where
   parseJSON = withObject "response" $ \o -> EventResponse
                                             <$> o .: "method"
+                                            <*> o .: "params"
 
 data DebuggingResponse a = DebuggingResponse { _resId :: Int
                                              , _resResult :: a

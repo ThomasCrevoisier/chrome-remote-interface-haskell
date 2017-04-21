@@ -117,15 +117,15 @@ sendCmd' cmd = do
                                   else waitResponse chanRes' id'
         _ -> waitResponse chanRes' id'
 
-listenToMethod :: String -> WSChannelsT ()
-listenToMethod method = do
+listenToMethod :: (Show res, FromJSON res) => String -> (res -> IO ()) -> WSChannelsT ()
+listenToMethod method f = do
   (chanCmd, chanRes) <- dupWSChannels
   liftIO $ forever $ do
     res <- atomically $ readTChan chanRes
-    let event = decode . B8.pack . T.unpack $ res :: Maybe (WSResponse Value)
+    let event = decode . B8.pack . T.unpack $ res
     case event of
-      Just (Event content) -> if _eventMethod content == method
-                                 then print content
+      Just (Event event') -> if _eventMethod event' == method
+                                 then f $ _eventContent event'
                                  else return ()
       _ -> return ()
 

@@ -109,8 +109,3 @@ withTarget page actions = do
       wsServer page
       actions
       return ()
-
-onPage :: Target -> WSClient a -> IO ()
-onPage page commands = case wsClientFromTarget page of
-                   Nothing -> putStrLn "Page got a wrong config"
-                   Just (domain', port', path') -> withSocketsDo $ WS.runClient domain' (fromInteger port') path' (executeOnPage commands)

@@ -21,8 +21,6 @@ import Control.Concurrent.STM.TChan
 
 import Chrome.InspectablePage
 import Chrome.DebuggingMessage
-import Chrome.API.Page
-import Chrome.API.DOM
 
 type WSClient = ReaderT WS.Connection IO
 
@@ -39,31 +37,6 @@ socketClient (inChan, outChan) conn = do
     WS.sendTextData conn msg
 
   mapM_ wait [readProc, writeProc]
-
-sendCmd :: (ToJSON req, Show res, FromJSON res) => Command req -> WSClient (Maybe res)
-sendCmd cmd = do
-  conn <- ask
-  msg <- liftIO $ commandToMsg cmd
-
-  res <- liftIO $ async $ waitForMessage (msgId msg) conn
-
-  liftIO $ T.putStrLn (msgToText msg) >> putStrLn "\n\n"
-
-  liftIO $ do
-    WS.sendTextData conn (msgToText msg)
-    wait res
-  where
-    waitForMessage :: (Show res, FromJSON res) => Int -> WS.Connection -> IO (Maybe res)
-    waitForMessage id' c = do
-      msgReceived <- WS.receiveData c
-      liftIO $ T.putStrLn msgReceived >> putStrLn "\n\n"
-      let decodedMsg = decode . B8.pack . T.unpack $ msgReceived
-      let decodedRes = _resResult <$> decodedMsg
-      case _resId <$> decodedMsg of
-        Nothing -> waitForMessage id' c
-        Just msgId -> if msgId == id'
-                         then pure decodedRes
-                         else waitForMessage id' c
 
 executeOnPage :: WSClient a -> WS.ClientApp ()
 executeOnPage commands = \conn -> do
@@ -84,20 +57,6 @@ dupWSChannels :: WSChannelsT WSChannels
 dupWSChannels = do
   (chanCmd, chanRes) <- ask
   liftIO . atomically $ (,) <$> dupTChan chanCmd <*> dupTChan chanRes
-
--- TODO : remove it
-dupCmdChannel :: WSChannelsT WSChannels
-dupCmdChannel = do
-  (chanCmd, chanRes) <- ask
-  chanCmd' <- liftIO . atomically $ dupTChan chanCmd
-  return (chanCmd', chanRes)
-
--- TODO : remove it
-dupResChannel :: WSChannelsT WSChannels
-dupResChannel = do
-  (chanCmd, chanRes) <- ask
-  chanRes' <- liftIO . atomically $ dupTChan chanRes
-  return (chanCmd, chanRes')
 
 sendCmd' :: (ToJSON req, Show res, FromJSON res) => Command req -> WSChannelsT (Maybe res)
 sendCmd' cmd = do
@@ -140,8 +99,8 @@ wsServer page = case wsClientFromPage page of
 
     return $ Just ()
 
-onPage' :: InspectablePage -> WSChannelsT a -> IO ()
-onPage' page actions = do
+withTarget :: InspectablePage -> WSChannelsT a -> IO ()
+withTarget page actions = do
   channels <- createWSChannels
   runReaderT actions' channels
   where
@@ -150,7 +109,7 @@ onPage' page actions = do
       wsServer page
       actions
       return ()
-      
+
 onPage :: InspectablePage -> WSClient a -> IO ()
 onPage page commands = case wsClientFromPage page of
                    Nothing -> putStrLn "Page got a wrong config"

@@ -9,11 +9,13 @@ import GHC.Generics
 import Data.Map (empty, insert)
 import Chrome.DebuggingMessage
 
+import Chrome.WSClient (sendCmd', WSChannelsT)
+
 enable :: Command ()
 enable = Command "DOM.enable" ()
 
 disable :: Command ()
-disable = Command "DOM.disble" ()
+disable = Command "DOM.disable" ()
 
 getDocument :: Command ()
 getDocument = Command "DOM.getDocument" ()
@@ -43,7 +45,10 @@ instance FromJSON QuerySelectorAllResponse where
                                             <$> o .: "nodeIds"
 
 querySelectorAll :: Int -> String -> Command QuerySelectorParam
-querySelectorAll nId selector = Command "DOM.querySelectorAll" $ QuerySelectorParam nId selector
+querySelectorAll nId = Command "DOM.querySelectorAll" . QuerySelectorParam nId
+
+querySelectorAll' :: QuerySelectorParam -> WSChannelsT (Maybe QuerySelectorAllResponse)
+querySelectorAll' = sendCmd' . Command "DOM.querySelectorAll"
 
 data GetDocumentResponse
   = GetDocumentResponse { root :: Node }

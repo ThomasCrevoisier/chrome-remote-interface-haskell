@@ -34,6 +34,8 @@ import Chrome.API.DOM (
   , Node(..)
   , QuerySelectorResponse
   , querySelectorAll
+  , QuerySelectorParam(..)
+  , querySelectorAll'
   , QuerySelectorAllResponse
   )
 
@@ -52,12 +54,13 @@ sampleCommands = do
   case doc of
     Nothing -> liftIO $ putStrLn "No document found :/"
     Just doc' -> do
-      nodes <- sendCmd' $ querySelectorAll (nodeId . root $ doc') "a" :: WSChannelsT (Maybe QuerySelectorAllResponse)
+      nodes <- querySelectorAll' (QuerySelectorParam (nodeId . root $ doc') "a")
+      -- nodes <- sendCmd' $ querySelectorAll (nodeId . root $ doc') "a" :: WSChannelsT (Maybe QuerySelectorAllResponse)
       liftIO $ print nodes
 
-  sendCmd' CN.enable :: WSChannelsT (Maybe Value)
+  -- sendCmd' CN.enable :: WSChannelsT (Maybe Value)
 
-  listenToMethod CN.eventRequestWillBeSent printRequest
+  -- listenToMethod CN.eventRequestWillBeSent printRequest
 
   return ()
   where
@@ -71,4 +74,4 @@ main = do
   case firstPage of
     Nothing -> putStrLn "No page found"
     Just p -> do
-      onPage' p sampleCommands
+      withTarget p sampleCommands

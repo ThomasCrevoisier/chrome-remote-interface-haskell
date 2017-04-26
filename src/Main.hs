@@ -24,7 +24,7 @@ import Control.Monad.Trans.Reader
 
 import Chrome.Target
 import Chrome.DebuggingMessage
-import Chrome.WSClient
+import Chrome.Target.Client
 import Chrome.API.Page (navigate)
 import Chrome.API.DOM (
   getDocument
@@ -44,20 +44,20 @@ head' :: [a] -> Maybe a
 head' (x:_) = Just x
 head' _ = Nothing
 
-sampleCommands :: WSChannelsT ()
+sampleCommands :: TargetClient ()
 sampleCommands = do
-  sendCmd' $ navigate "http://gitlab.com" :: WSChannelsT (Maybe Value)
-  doc <- sendCmd' getDocument :: WSChannelsT (Maybe GetDocumentResponse)
+  sendCmd' $ navigate "http://gitlab.com" :: TargetClient (Maybe Value)
+  doc <- sendCmd' getDocument :: TargetClient (Maybe GetDocumentResponse)
   liftIO $ print doc
 
   case doc of
     Nothing -> liftIO $ putStrLn "No document found :/"
     Just doc' -> do
       nodes <- querySelectorAll' (QuerySelectorParam (nodeId . root $ doc') "a")
-      -- nodes <- sendCmd' $ querySelectorAll (nodeId . root $ doc') "a" :: WSChannelsT (Maybe QuerySelectorAllResponse)
+      -- nodes <- sendCmd' $ querySelectorAll (nodeId . root $ doc') "a" :: TargetClient (Maybe QuerySelectorAllResponse)
       liftIO $ print nodes
 
-  -- sendCmd' CN.enable :: WSChannelsT (Maybe Value)
+  -- sendCmd' CN.enable :: TargetClient (Maybe Value)
 
   -- listenToMethod CN.eventRequestWillBeSent printRequest
 

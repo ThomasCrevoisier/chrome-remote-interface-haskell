@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Chrome.WSClient where
+module Chrome.Target.Client where
 
 import Network.Socket (withSocketsDo)
 import Network.WebSockets as WS
@@ -22,8 +22,6 @@ import Control.Concurrent.STM.TChan
 import Chrome.Target
 import Chrome.DebuggingMessage
 
-type WSClient = ReaderT WS.Connection IO
-
 socketClient :: (TChan T.Text, TChan T.Text) -> WS.ClientApp ()
 socketClient (inChan, outChan) conn = do
   readProc <- async $ forever $ do
@@ -38,19 +36,19 @@ socketClient (inChan, outChan) conn = do
 
   mapM_ wait [readProc, writeProc]
 
-type WSChannels = (TChan T.Text, TChan T.Text)
+type TargetClientChannels = (TChan T.Text, TChan T.Text)
 
-createWSChannels :: IO WSChannels
+createWSChannels :: IO TargetClientChannels
 createWSChannels = (,) <$> newBroadcastTChanIO <*> newBroadcastTChanIO
 
-type WSChannelsT = ReaderT WSChannels IO
+type TargetClient = ReaderT TargetClientChannels IO
 
-dupWSChannels :: WSChannelsT WSChannels
+dupWSChannels :: TargetClient TargetClientChannels
 dupWSChannels = do
   (chanCmd, chanRes) <- ask
   liftIO . atomically $ (,) <$> dupTChan chanCmd <*> dupTChan chanRes
 
-sendCmd' :: (ToJSON req, Show res, FromJSON res) => Command req -> WSChannelsT (Maybe res)
+sendCmd' :: (ToJSON req, Show res, FromJSON res) => Command req -> TargetClient (Maybe res)
 sendCmd' cmd = do
   (chanCmd, chanRes) <- dupWSChannels
   msg <- liftIO $ commandToMsg cmd
@@ -68,7 +66,7 @@ sendCmd' cmd = do
                                   else waitResponse chanRes' id'
         _ -> waitResponse chanRes' id'
 
-listenToMethod :: (Show res, FromJSON res) => String -> (res -> IO ()) -> WSChannelsT ()
+listenToMethod :: (Show res, FromJSON res) => String -> (res -> IO ()) -> TargetClient ()
 listenToMethod method f = do
   (chanCmd, chanRes) <- dupWSChannels
   liftIO $ forever $ do
@@ -80,7 +78,7 @@ listenToMethod method f = do
                                  else return ()
       _ -> return ()
 
-wsServer :: Target -> WSChannelsT (Maybe ())
+wsServer :: Target -> TargetClient (Maybe ())
 wsServer page = case wsClientFromTarget page of
   Nothing -> pure Nothing
   Just (domain', port', path') -> do
@@ -91,12 +89,12 @@ wsServer page = case wsClientFromTarget page of
 
     return $ Just ()
 
-withTarget :: Target -> WSChannelsT a -> IO ()
+withTarget :: Target -> TargetClient a -> IO ()
 withTarget page actions = do
   channels <- createWSChannels
   runReaderT actions' channels
   where
-    actions' :: WSChannelsT ()
+    actions' :: TargetClient ()
     actions' = do
       wsServer page
       actions

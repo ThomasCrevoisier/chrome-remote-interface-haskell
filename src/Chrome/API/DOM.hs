@@ -11,9 +11,7 @@ module Chrome.API.DOM (
 
 import Data.Aeson
 
-import Data.Map (empty, insert)
 import Chrome.Target.Message
-
 import Chrome.Target.Client (sendCmd', TargetClient)
 
 import Chrome.API.DOM.Types

@@ -11,14 +11,14 @@ import Chrome.Target.Message
 
 import Chrome.Target.Client (sendCmd', TargetClient)
 
-enable :: Command ()
-enable = Command "DOM.enable" ()
+enable :: Method ()
+enable = Method "DOM.enable" ()
 
-disable :: Command ()
-disable = Command "DOM.disable" ()
+disable :: Method ()
+disable = Method "DOM.disable" ()
 
-getDocument :: Command ()
-getDocument = Command "DOM.getDocument" ()
+getDocument :: Method ()
+getDocument = Method "DOM.getDocument" ()
 
 data QuerySelectorParam = QuerySelectorParam { _qNodeId :: Int
                                              , _qSelector :: String
@@ -35,8 +35,8 @@ instance FromJSON QuerySelectorResponse where
   parseJSON = withObject "response" $ \o -> QuerySelectorResponse
                                             <$> o .: "nodeId"
 
-querySelector :: Int -> String -> Command QuerySelectorParam
-querySelector nId selector = Command "DOM.querySelector" $ QuerySelectorParam nId selector
+querySelector :: Int -> String -> Method QuerySelectorParam
+querySelector nId selector = Method "DOM.querySelector" $ QuerySelectorParam nId selector
 
 data QuerySelectorAllResponse = QuerySelectorAllResponse { _rNodeIds :: [Int] } deriving Show
 
@@ -44,11 +44,11 @@ instance FromJSON QuerySelectorAllResponse where
   parseJSON = withObject "response" $ \o -> QuerySelectorAllResponse
                                             <$> o .: "nodeIds"
 
-querySelectorAll :: Int -> String -> Command QuerySelectorParam
-querySelectorAll nId = Command "DOM.querySelectorAll" . QuerySelectorParam nId
+querySelectorAll :: Int -> String -> Method QuerySelectorParam
+querySelectorAll nId = Method "DOM.querySelectorAll" . QuerySelectorParam nId
 
 querySelectorAll' :: QuerySelectorParam -> TargetClient (Maybe QuerySelectorAllResponse)
-querySelectorAll' = sendCmd' . Command "DOM.querySelectorAll"
+querySelectorAll' = sendCmd' . Method "DOM.querySelectorAll"
 
 data GetDocumentResponse
   = GetDocumentResponse { root :: Node }

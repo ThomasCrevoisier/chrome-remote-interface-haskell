@@ -4,11 +4,11 @@ import Data.Map (Map, empty, insert)
 
 import Chrome.Target.Message
 
-enable :: Command (Map String String)
-enable = Command "Page.enable" empty
+enable :: Method (Map String String)
+enable = Method "Page.enable" empty
 
-disable :: Command (Map String String)
-disable = Command "Page.disable" empty
+disable :: Method (Map String String)
+disable = Method "Page.disable" empty
 
-navigate :: String -> Command (Map String String)
-navigate url = Command "Page.navigate" (insert "url" url empty)
+navigate :: String -> Method (Map String String)
+navigate url = Method "Page.navigate" (insert "url" url empty)

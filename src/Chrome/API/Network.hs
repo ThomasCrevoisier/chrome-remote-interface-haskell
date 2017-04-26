@@ -6,11 +6,11 @@ import Data.Aeson
 import Data.Map (Map, empty)
 import Chrome.Target.Message
 
-enable :: Command (Map String String)
-enable = Command "Network.enable" empty
+enable :: Method (Map String String)
+enable = Method "Network.enable" empty
 
-disable :: Command (Map String String)
-disable = Command "Network.disable" empty
+disable :: Method (Map String String)
+disable = Method "Network.disable" empty
 
 eventRequestWillBeSent :: String
 eventRequestWillBeSent = "Network.requestWillBeSent"

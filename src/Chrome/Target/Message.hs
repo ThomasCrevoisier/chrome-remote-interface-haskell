@@ -15,33 +15,33 @@ import Data.Map
 import System.Random (randomRIO)
 import Control.Applicative ((<|>))
 
-data Command a = Command { _cmdMethod :: String
-                         , _cmdParams :: a
-                         } deriving Show
+data Method a = Method { _cmdMethod :: String
+                       , _cmdParams :: a
+                       } deriving Show
 
-data DebuggingMsg a = DebuggingMsg Int (Command a) deriving Show
+data OutgoingMsg a = OutgoingMsg Int (Method a) deriving Show
 
-msgId :: DebuggingMsg a -> Int
-msgId (DebuggingMsg id' _) = id'
+msgId :: OutgoingMsg a -> Int
+msgId (OutgoingMsg id' _) = id'
 
-instance ToJSON a => ToJSON (DebuggingMsg a) where
-  toJSON (DebuggingMsg msgId cmd) = object [ "id" .= msgId
-                                           , "method" .= _cmdMethod cmd
-                                           , "params" .= _cmdParams cmd
-                                           ]
+instance ToJSON a => ToJSON (OutgoingMsg a) where
+  toJSON (OutgoingMsg msgId cmd) = object [ "id" .= msgId
+                                          , "method" .= _cmdMethod cmd
+                                          , "params" .= _cmdParams cmd
+                                          ]
 
-msgToText :: ToJSON a => DebuggingMsg a -> Text
+msgToText :: ToJSON a => OutgoingMsg a -> Text
 msgToText = T.pack . B8.unpack . encode
 
-commandToMsg :: Command a -> IO (DebuggingMsg a)
-commandToMsg cmd = flip DebuggingMsg cmd <$> (abs <$> randomRIO (1, 2000000))
+methodToMsg :: Method a -> IO (OutgoingMsg a)
+methodToMsg cmd = flip OutgoingMsg cmd <$> (abs <$> randomRIO (1, 2000000))
 
-data WSResponse a
+data IncomingMsg a
   = Event (EventResponse a)
-  | Result (DebuggingResponse a)
+  | Result (MethodResult a)
   deriving (Show, Generic)
 
-instance FromJSON a => FromJSON (WSResponse a) where
+instance FromJSON a => FromJSON (IncomingMsg a) where
   parseJSON v = (Event <$> parseJSON v) <|> (Result <$> parseJSON v)
 
 data EventResponse a = EventResponse { _eventMethod :: String, _eventContent :: a } deriving Show
@@ -51,11 +51,11 @@ instance FromJSON a => FromJSON (EventResponse a) where
                                             <$> o .: "method"
                                             <*> o .: "params"
 
-data DebuggingResponse a = DebuggingResponse { _resId :: Int
-                                             , _resResult :: a
-                                             } deriving Show
+data MethodResult a = MethodResult { _resId :: Int
+                                   , _resResult :: a
+                                   } deriving Show
 
-instance FromJSON a => FromJSON (DebuggingResponse a) where
-  parseJSON = withObject "response" $ \o -> DebuggingResponse
+instance FromJSON a => FromJSON (MethodResult a) where
+  parseJSON = withObject "response" $ \o -> MethodResult
                                             <$> o .: "id"
                                             <*> o .: "result"

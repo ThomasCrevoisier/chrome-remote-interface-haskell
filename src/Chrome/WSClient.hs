@@ -38,14 +38,6 @@ socketClient (inChan, outChan) conn = do
 
   mapM_ wait [readProc, writeProc]
 
-executeOnPage :: WSClient a -> WS.ClientApp ()
-executeOnPage commands = \conn -> do
-  putStrLn "Connexion on client !"
-
-  runReaderT commands conn
-
-  WS.sendClose conn ("Bye !" :: Text)
-
 type WSChannels = (TChan T.Text, TChan T.Text)
 
 createWSChannels :: IO WSChannels

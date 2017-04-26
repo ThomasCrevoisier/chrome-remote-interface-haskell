@@ -20,7 +20,7 @@ import Control.Concurrent (forkIO)
 import Control.Concurrent.STM.TChan
 
 import Chrome.Target
-import Chrome.DebuggingMessage
+import Chrome.Target.Message
 
 socketClient :: (TChan T.Text, TChan T.Text) -> WS.ClientApp ()
 socketClient (inChan, outChan) conn = do

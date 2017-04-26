@@ -23,7 +23,7 @@ import Control.Monad.Trans
 import Control.Monad.Trans.Reader
 
 import Chrome.Target
-import Chrome.DebuggingMessage
+import Chrome.Target.Message
 import Chrome.Target.Client
 import Chrome.API.Page (navigate)
 import Chrome.API.DOM (

@@ -7,7 +7,7 @@ import Data.Aeson
 import GHC.Generics
 
 import Data.Map (empty, insert)
-import Chrome.DebuggingMessage
+import Chrome.Target.Message
 
 import Chrome.Target.Client (sendCmd', TargetClient)
 

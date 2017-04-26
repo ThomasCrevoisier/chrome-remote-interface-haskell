@@ -19,7 +19,7 @@ executable chrome-remote-interface-haskell
   other-modules:       Chrome.Target
                      , Chrome.Target.DebuggingURL
                      , Chrome.Target.Client
-                     , Chrome.DebuggingMessage
+                     , Chrome.Target.Message
                      , Chrome.API.Page
                      , Chrome.API.DOM
                      , Chrome.API.Network

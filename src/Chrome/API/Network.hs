@@ -4,7 +4,7 @@ module Chrome.API.Network where
 
 import Data.Aeson
 import Data.Map (Map, empty)
-import Chrome.DebuggingMessage
+import Chrome.Target.Message
 
 enable :: Command (Map String String)
 enable = Command "Network.enable" empty

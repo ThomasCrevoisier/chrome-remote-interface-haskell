@@ -2,7 +2,7 @@
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE DeriveGeneric #-}
 
-module Chrome.DebuggingMessage where
+module Chrome.Target.Message where
 
 import GHC.Generics
 

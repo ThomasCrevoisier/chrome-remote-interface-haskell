@@ -2,7 +2,7 @@ module Chrome.API.Page where
 
 import Data.Map (Map, empty, insert)
 
-import Chrome.DebuggingMessage
+import Chrome.Target.Message
 
 enable :: Command (Map String String)
 enable = Command "Page.enable" empty

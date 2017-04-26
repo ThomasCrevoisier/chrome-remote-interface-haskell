@@ -7,7 +7,6 @@ module Chrome.API.DOM (
   , getDocument
   , querySelector
   , querySelectorAll
-  , querySelectorAll'
   ) where
 
 import Data.Aeson
@@ -19,21 +18,17 @@ import Chrome.Target.Client (sendCmd', TargetClient)
 
 import Chrome.API.DOM.Types
 
-enable :: Method ()
-enable = Method "DOM.enable" ()
+enable :: TargetClient (Maybe ())
+enable = sendCmd' $ Method "DOM.enable" ()
 
-disable :: Method ()
-disable = Method "DOM.disable" ()
+disable :: TargetClient (Maybe ())
+disable = sendCmd' $ Method "DOM.disable" ()
 
-getDocument :: Method ()
-getDocument = Method "DOM.getDocument" ()
+getDocument :: TargetClient (Maybe GetDocumentResponse)
+getDocument = sendCmd' $ Method "DOM.getDocument" ()
 
-querySelector :: Int -> String -> Method QuerySelectorParam
-querySelector nId selector = Method "DOM.querySelector" $ QuerySelectorParam nId selector
+querySelector :: QuerySelectorParam -> TargetClient (Maybe QuerySelectorResponse)
+querySelector = sendCmd' . Method "DOM.querySelector"
 
-
-querySelectorAll :: Int -> String -> Method QuerySelectorParam
-querySelectorAll nId = Method "DOM.querySelectorAll" . QuerySelectorParam nId
-
-querySelectorAll' :: QuerySelectorParam -> TargetClient (Maybe QuerySelectorAllResponse)
-querySelectorAll' = sendCmd' . Method "DOM.querySelectorAll"
+querySelectorAll :: QuerySelectorParam -> TargetClient (Maybe QuerySelectorAllResponse)
+querySelectorAll = sendCmd' . Method "DOM.querySelectorAll"

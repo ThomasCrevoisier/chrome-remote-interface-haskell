@@ -32,9 +32,9 @@ import Chrome.API.DOM (
   , querySelector
   , Node(..)
   , QuerySelectorResponse
-  , querySelectorAll
   , QuerySelectorParam(..)
-  , querySelectorAll'
+  , querySelectorAll
+  , QuerySelectorAllParam
   , QuerySelectorAllResponse
   )
 
@@ -47,13 +47,13 @@ head' _ = Nothing
 sampleCommands :: TargetClient ()
 sampleCommands = do
   sendCmd' $ navigate "http://gitlab.com" :: TargetClient (Maybe Value)
-  doc <- sendCmd' getDocument :: TargetClient (Maybe GetDocumentResponse)
+  doc <- getDocument
   liftIO $ print doc
 
   case doc of
     Nothing -> liftIO $ putStrLn "No document found :/"
     Just doc' -> do
-      nodes <- querySelectorAll' (QuerySelectorParam (nodeId . root $ doc') "a")
+      nodes <- querySelectorAll (QuerySelectorParam (nodeId . root $ doc') "a")
       -- nodes <- sendCmd' $ querySelectorAll (nodeId . root $ doc') "a" :: TargetClient (Maybe QuerySelectorAllResponse)
       liftIO $ print nodes
 

@@ -22,7 +22,6 @@ import Control.Monad (forever, unless)
 import Control.Monad.Trans
 import Control.Monad.Trans.Reader
 
-import Chrome.DebuggingURL
 import Chrome.Target
 import Chrome.DebuggingMessage
 import Chrome.WSClient

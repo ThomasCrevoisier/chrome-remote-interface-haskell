@@ -1,10 +1,10 @@
-module Chrome.DebuggingURL where
+module Chrome.Target.DebuggingURL where
 
 import Network.URL
 import Data.Aeson
 import Data.Text (unpack)
 
-newtype DebuggingURL 
+newtype DebuggingURL
   = DebuggingURL URL
   deriving Show
 
@@ -20,4 +20,3 @@ debuggingURLHost (DebuggingURL (URL urlType _ _)) = case urlType of
 
 debuggingURLPath :: DebuggingURL -> String
 debuggingURLPath (DebuggingURL url) = '/' : url_path url
-

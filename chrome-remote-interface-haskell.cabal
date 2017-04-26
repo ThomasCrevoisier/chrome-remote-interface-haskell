@@ -16,8 +16,8 @@ extra-source-files:  README.md
 executable chrome-remote-interface-haskell
   hs-source-dirs:      src
   main-is:             Main.hs
-  other-modules:       Chrome.DebuggingURL
-                     , Chrome.Target
+  other-modules:       Chrome.Target
+                     , Chrome.Target.DebuggingURL
                      , Chrome.DebuggingMessage
                      , Chrome.WSClient
                      , Chrome.API.Page

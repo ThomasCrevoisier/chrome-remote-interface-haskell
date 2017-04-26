@@ -9,7 +9,7 @@ import Data.Maybe
 import Network.HTTP.Client (newManager, httpLbs, defaultManagerSettings, responseBody)
 import Network.URL
 
-import Chrome.DebuggingURL
+import Chrome.Target.DebuggingURL
 
 data Target = Target { _targetId :: String
                      , _targetTitle :: String

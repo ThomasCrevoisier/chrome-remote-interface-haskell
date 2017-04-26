@@ -1,14 +1,16 @@
 module Chrome.API.Page where
 
 import Data.Map (Map, empty, insert)
+import Data.Aeson (Value)
 
 import Chrome.Target.Message
+import Chrome.Target.Client
 
-enable :: Method (Map String String)
-enable = Method "Page.enable" empty
+enable :: TargetClient (Maybe Value)
+enable = sendCmd' $ Method "Page.enable" (empty :: Map String String)
 
-disable :: Method (Map String String)
-disable = Method "Page.disable" empty
+disable :: TargetClient (Maybe Value)
+disable = sendCmd' $ Method "Page.disable" (empty :: Map String String)
 
-navigate :: String -> Method (Map String String)
-navigate url = Method "Page.navigate" (insert "url" url empty)
+navigate :: String -> TargetClient (Maybe Value)
+navigate url = sendCmd' $ Method "Page.navigate" (insert "url" url empty)

@@ -46,7 +46,7 @@ head' _ = Nothing
 
 sampleCommands :: TargetClient ()
 sampleCommands = do
-  sendCmd' $ navigate "http://gitlab.com" :: TargetClient (Maybe Value)
+  navigate "http://gitlab.com"
 
   res <- CN.enable
   liftIO $ print res

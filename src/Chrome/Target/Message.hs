@@ -1,10 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
-{-# LANGUAGE DeriveGeneric #-}
 
 module Chrome.Target.Message where
-
-import GHC.Generics
 
 import Data.Aeson
 import Data.Text as T
@@ -39,7 +36,7 @@ methodToMsg cmd = flip OutgoingMsg cmd <$> (abs <$> randomRIO (1, 2000000))
 data IncomingMsg a
   = Event (EventResponse a)
   | Result (MethodResult a)
-  deriving (Show, Generic)
+  deriving (Show)
 
 instance FromJSON a => FromJSON (IncomingMsg a) where
   parseJSON v = (Event <$> parseJSON v) <|> (Result <$> parseJSON v)

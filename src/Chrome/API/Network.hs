@@ -1,26 +1,25 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Chrome.API.Network where
+module Chrome.API.Network (
+    module Chrome.API.Network.Types
+  , enable
+  , disable
+  , onRequestWillBeSent
+  ) where
 
-import Data.Aeson
+import Data.Aeson (Value)
 import Data.Map (Map, empty)
+
 import Chrome.Target.Message
+import Chrome.Target.Client
 
-enable :: Method (Map String String)
-enable = Method "Network.enable" empty
+import Chrome.API.Network.Types
 
-disable :: Method (Map String String)
-disable = Method "Network.disable" empty
+enable :: TargetClient (Maybe Value)
+enable = sendCmd' $ (Method "Network.enable" empty :: Method (Map String String))
 
-eventRequestWillBeSent :: String
-eventRequestWillBeSent = "Network.requestWillBeSent"
+disable :: TargetClient (Maybe Value)
+disable = sendCmd' $ (Method "Network.disable" empty :: Method (Map String String))
 
-data RequestEvent = RequestEvent { _eventRequest :: Request } deriving Show
-
-instance FromJSON RequestEvent where
-  parseJSON = withObject "response" $ \o -> RequestEvent <$> o .: "request"
-
-data Request = Request { _reqUrl :: String } deriving Show
-
-instance FromJSON Request where
-  parseJSON = withObject "request" $ \o -> Request <$> o .: "url"
+onRequestWillBeSent :: (RequestEvent -> IO ()) -> TargetClient ()
+onRequestWillBeSent = listenToMethod "Network.requestWillBeSent"

@@ -47,19 +47,11 @@ head' _ = Nothing
 sampleCommands :: TargetClient ()
 sampleCommands = do
   sendCmd' $ navigate "http://gitlab.com" :: TargetClient (Maybe Value)
-  doc <- getDocument
-  liftIO $ print doc
 
-  case doc of
-    Nothing -> liftIO $ putStrLn "No document found :/"
-    Just doc' -> do
-      nodes <- querySelectorAll (QuerySelectorParam (nodeId . root $ doc') "a")
-      -- nodes <- sendCmd' $ querySelectorAll (nodeId . root $ doc') "a" :: TargetClient (Maybe QuerySelectorAllResponse)
-      liftIO $ print nodes
+  res <- CN.enable
+  liftIO $ print res
 
-  -- sendCmd' CN.enable :: TargetClient (Maybe Value)
-
-  -- listenToMethod CN.eventRequestWillBeSent printRequest
+  CN.onRequestWillBeSent printRequest
 
   return ()
   where

@@ -19,7 +19,7 @@ import Control.Monad.STM (atomically)
 import Control.Concurrent (forkIO)
 import Control.Concurrent.STM.TChan
 
-import Chrome.InspectablePage
+import Chrome.Target
 import Chrome.DebuggingMessage
 
 type WSClient = ReaderT WS.Connection IO
@@ -88,8 +88,8 @@ listenToMethod method f = do
                                  else return ()
       _ -> return ()
 
-wsServer :: InspectablePage -> WSChannelsT (Maybe ())
-wsServer page = case wsClientFromPage page of
+wsServer :: Target -> WSChannelsT (Maybe ())
+wsServer page = case wsClientFromTarget page of
   Nothing -> pure Nothing
   Just (domain', port', path') -> do
     (chanCmd, chanRes) <- dupWSChannels
@@ -99,7 +99,7 @@ wsServer page = case wsClientFromPage page of
 
     return $ Just ()
 
-withTarget :: InspectablePage -> WSChannelsT a -> IO ()
+withTarget :: Target -> WSChannelsT a -> IO ()
 withTarget page actions = do
   channels <- createWSChannels
   runReaderT actions' channels
@@ -110,7 +110,7 @@ withTarget page actions = do
       actions
       return ()
 
-onPage :: InspectablePage -> WSClient a -> IO ()
-onPage page commands = case wsClientFromPage page of
+onPage :: Target -> WSClient a -> IO ()
+onPage page commands = case wsClientFromTarget page of
                    Nothing -> putStrLn "Page got a wrong config"
                    Just (domain', port', path') -> withSocketsDo $ WS.runClient domain' (fromInteger port') path' (executeOnPage commands)

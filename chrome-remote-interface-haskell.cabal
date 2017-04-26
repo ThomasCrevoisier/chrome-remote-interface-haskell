@@ -17,7 +17,7 @@ executable chrome-remote-interface-haskell
   hs-source-dirs:      src
   main-is:             Main.hs
   other-modules:       Chrome.DebuggingURL
-                     , Chrome.InspectablePage
+                     , Chrome.Target
                      , Chrome.DebuggingMessage
                      , Chrome.WSClient
                      , Chrome.API.Page

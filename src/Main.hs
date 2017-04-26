@@ -23,7 +23,7 @@ import Control.Monad.Trans
 import Control.Monad.Trans.Reader
 
 import Chrome.DebuggingURL
-import Chrome.InspectablePage
+import Chrome.Target
 import Chrome.DebuggingMessage
 import Chrome.WSClient
 import Chrome.API.Page (navigate)
@@ -69,7 +69,7 @@ sampleCommands = do
 
 main :: IO ()
 main = do
-  pages <- fetchInspectablePages
+  pages <- fetchTargets
   let firstPage = head' =<< pages
   case firstPage of
     Nothing -> putStrLn "No page found"

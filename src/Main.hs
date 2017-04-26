@@ -2,43 +2,18 @@
 
 module Main where
 
-import Network.HTTP.Client (newManager, httpLbs, defaultManagerSettings, responseBody)
-import Data.Aeson
-import Data.Text as T
-import qualified Data.ByteString.Lazy.Char8 as B8
 
-import qualified Data.Text.IO as T
 import Data.Maybe
-import Data.Map as M
-
-import Network.Socket (withSocketsDo)
-import qualified Network.WebSockets as WS
-import Network.URL
-
-import Control.Concurrent (forkIO)
-import Control.Concurrent.Async (async, wait)
-import Control.Monad (forever, unless)
 
 import Control.Monad.Trans
 import Control.Monad.Trans.Reader
 
 import Chrome.Target
-import Chrome.Target.Message
 import Chrome.Target.Client
-import Chrome.API.Page (navigate)
-import Chrome.API.DOM (
-  getDocument
-  , GetDocumentResponse(..)
-  , querySelector
-  , Node(..)
-  , QuerySelectorResponse
-  , QuerySelectorParam(..)
-  , querySelectorAll
-  , QuerySelectorAllParam
-  , QuerySelectorAllResponse
-  )
 
-import qualified Chrome.API.Network as CN
+import qualified Chrome.API.Page as Page
+import qualified Chrome.API.DOM as DOM
+import qualified Chrome.API.Network as Network
 
 head' :: [a] -> Maybe a
 head' (x:_) = Just x
@@ -46,17 +21,14 @@ head' _ = Nothing
 
 sampleCommands :: TargetClient ()
 sampleCommands = do
-  navigate "http://gitlab.com"
-
-  res <- CN.enable
-  liftIO $ print res
-
-  CN.onRequestWillBeSent printRequest
+  Page.navigate "http://gitlab.com"
+  Network.enable
+  Network.onRequestWillBeSent printRequest
 
   return ()
   where
-    printRequest :: CN.RequestEvent -> IO ()
-    printRequest (CN.RequestEvent (CN.Request url)) = liftIO $ print url
+    printRequest :: Network.RequestEvent -> IO ()
+    printRequest (Network.RequestEvent (Network.Request url)) = liftIO $ print url
 
 main :: IO ()
 main = do
@@ -64,5 +36,4 @@ main = do
   let firstPage = head' =<< pages
   case firstPage of
     Nothing -> putStrLn "No page found"
-    Just p -> do
-      withTarget p sampleCommands
+    Just p -> withTarget p sampleCommands

@@ -14,3 +14,32 @@ disable = sendCmd' $ Method "Page.disable" (empty :: Map String String)
 
 navigate :: String -> TargetClient (Maybe Value)
 navigate url = sendCmd' $ Method "Page.navigate" (insert "url" url empty)
+
+-- TODO : reload
+
+-- TODO : handleJavaScriptDialog
+
+-- TODO : onDomContentEventFired
+
+-- TODO : onLoadEventFired
+
+-- TODO : onFrameAttached
+
+-- TODO : onFrameNavigated
+
+-- TODO : onFrameDetached
+
+-- TODO : onJavascriptDialogOpening
+
+-- TODO : onJavascriptDialogClosed
+
+-- TODO : onInterstitialShown
+
+-- TODO : onInterstitialHidden
+
+-- TODO : onNavigationRequested
+
+-- TODO : types
+-- - ResourceType
+-- - FrameId
+-- - Frame

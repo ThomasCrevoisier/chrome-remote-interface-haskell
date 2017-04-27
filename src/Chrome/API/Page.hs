@@ -1,9 +1,20 @@
-module Chrome.API.Page where
+module Chrome.API.Page (
+      module Chrome.API.Page.Types
+    , enable
+    , disable
+    , reload
+    , navigate
+    , handleJavaScriptDialog
+    , captureScreenshot
+    , onLoadEventFired
+    ) where
 
 import Data.Map (Map, empty, insert)
 
 import Chrome.Target.Message
 import Chrome.Target.Client
+
+import Chrome.API.Page.Types
 
 enable :: TargetClientAsync (Maybe NoResult)
 enable = callMethod $ Method "Page.enable" noParam
@@ -21,6 +32,12 @@ navigate url = callMethod $ Method "Page.navigate" (insert "url" url empty)
 -- TODO : add optional parameter "promptText"
 handleJavaScriptDialog :: Bool -> TargetClientAsync (Maybe NoResult)
 handleJavaScriptDialog accept = callMethod $ Method "Page.handleJavaScriptDialog" (insert "accept" accept empty)
+
+captureScreenshot :: TargetClientAsync (Maybe CaptureScreenshotResult)
+captureScreenshot = callMethod $ Method "Page.captureScreenshot" (insert "format" "jpeg" empty)
+
+onLoadEventFired :: TargetClientAsync (Maybe NoResult)
+onLoadEventFired = listenToEventMethod "Page.loadEventFired"
 
 -- TODO : onDomContentEventFired
 

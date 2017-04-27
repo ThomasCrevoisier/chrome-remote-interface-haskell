@@ -24,14 +24,24 @@ head' _ = Nothing
 
 sampleCommands :: TargetClient ()
 sampleCommands = do
-  wait <$> Page.navigate "http://gitlab.com"
-  wait <$> Network.enable
+
+  waitFor Page.enable
+
+  waitFor $ Page.navigate "http://gitlab.com"
+
+  waitFor Page.onLoadEventFired
+
+  screenshot <- waitFor Page.captureScreenshot
+
+  case screenshot of
+       Just (Page.CaptureScreenshotResult img) -> liftIO $ writeFile "test-screenshot.txt" img
+       Nothing -> pure ()
+
+  waitFor Network.enable
 
   forever $ do
-      requestAsync <- Network.onRequestWillBeSent
-      liftIO $ do
-          request <- wait requestAsync
-          printRequest request
+      request <- waitFor Network.onRequestWillBeSent
+      liftIO $ printRequest request
   where
     printRequest :: Network.RequestEvent -> IO ()
     printRequest (Network.RequestEvent (Network.Request url)) = print url

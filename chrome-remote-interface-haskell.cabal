@@ -21,6 +21,7 @@ executable chrome-remote-interface-haskell
                      , Chrome.Target.Client
                      , Chrome.Target.Message
                      , Chrome.API.Page
+                     , Chrome.API.Page.Types
                      , Chrome.API.DOM
                      , Chrome.API.DOM.Types
                      , Chrome.API.Network

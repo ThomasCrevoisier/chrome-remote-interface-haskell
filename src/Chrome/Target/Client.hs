@@ -17,6 +17,7 @@ import qualified Data.ByteString.Lazy.Char8 as B8
 
 import Control.Monad.STM (atomically)
 import Control.Concurrent (forkIO)
+import Control.Concurrent.Async
 import Control.Concurrent.STM.TChan
 
 import Chrome.Target
@@ -66,17 +67,22 @@ callMethod cmd = do
                                   else waitResponse chanRes' id'
         _ -> waitResponse chanRes' id'
 
-listenToMethod :: (Show res, FromJSON res) => String -> (res -> IO ()) -> TargetClient ()
-listenToMethod method f = do
-  (chanCmd, chanRes) <- dupWSChannels
-  liftIO $ forever $ do
-    res <- atomically $ readTChan chanRes
-    let event = decode . B8.pack . T.unpack $ res
-    case event of
-      Just (Event event') -> if _eventMethod event' == method
-                                 then f $ _eventContent event'
-                                 else return ()
-      _ -> return ()
+type TargetClientAsync res = TargetClient (Async res)
+
+listenToEventMethod :: (FromJSON res) => String -> TargetClientAsync res
+listenToEventMethod method = do
+    (_, chanRes) <- dupWSChannels
+    liftIO $ async $ waitForMsg method chanRes
+    where
+        waitForMsg :: (FromJSON res) => String -> TChan T.Text -> IO res
+        waitForMsg method inChan = do
+            res <- atomically $ readTChan inChan
+            let event = decode . B8.pack . T.unpack $ res
+            case event of
+                Just (Event event') -> if _eventMethod event' == method
+                                            then pure $ _eventContent event'
+                                            else waitForMsg method inChan
+                _ -> waitForMsg method inChan
 
 wsServer :: Target -> TargetClient (Maybe ())
 wsServer page = case wsClientFromTarget page of
@@ -85,8 +91,7 @@ wsServer page = case wsClientFromTarget page of
     (chanCmd, chanRes) <- dupWSChannels
     server <- liftIO . async $ WS.runClient domain' (fromInteger port') path' (socketClient (chanCmd, chanRes))
 
-    -- liftIO $ wait server
-
+    -- TODO : remove this or use Either to encode error
     return $ Just ()
 
 withTarget :: Target -> TargetClient a -> IO ()

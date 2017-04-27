@@ -5,8 +5,11 @@ module Main where
 
 import Data.Maybe
 
+import Control.Monad
 import Control.Monad.Trans
 import Control.Monad.Trans.Reader
+
+import Control.Concurrent.Async
 
 import Chrome.Target
 import Chrome.Target.Client
@@ -23,12 +26,15 @@ sampleCommands :: TargetClient ()
 sampleCommands = do
   Page.navigate "http://gitlab.com"
   Network.enable
-  Network.onRequestWillBeSent printRequest
 
-  return ()
+  forever $ do
+      requestAsync <- Network.onRequestWillBeSent
+      liftIO $ do
+          request <- wait requestAsync
+          printRequest request
   where
     printRequest :: Network.RequestEvent -> IO ()
-    printRequest (Network.RequestEvent (Network.Request url)) = liftIO $ print url
+    printRequest (Network.RequestEvent (Network.Request url)) = print url
 
 main :: IO ()
 main = do

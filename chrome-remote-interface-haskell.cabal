@@ -36,6 +36,7 @@ executable chrome-remote-interface-haskell
                      , text
                      , mtl
                      , bytestring
+                     , base64-bytestring
                      , containers
                      , async
                      , transformers

@@ -33,8 +33,8 @@ navigate url = callMethod $ Method "Page.navigate" (insert "url" url empty)
 handleJavaScriptDialog :: Bool -> TargetClientAsync (Maybe NoResult)
 handleJavaScriptDialog accept = callMethod $ Method "Page.handleJavaScriptDialog" (insert "accept" accept empty)
 
-captureScreenshot :: TargetClientAsync (Maybe CaptureScreenshotResult)
-captureScreenshot = callMethod $ Method "Page.captureScreenshot" (insert "format" "jpeg" empty)
+captureScreenshot :: CaptureScreenshotParams -> TargetClientAsync (Maybe CaptureScreenshotResult)
+captureScreenshot params = callMethod $ Method "Page.captureScreenshot" params
 
 onLoadEventFired :: TargetClientAsync (Maybe NoResult)
 onLoadEventFired = listenToEventMethod "Page.loadEventFired"

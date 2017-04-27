@@ -4,6 +4,9 @@ module Main where
 
 
 import Data.Maybe
+import qualified Data.ByteString as B
+import qualified Data.ByteString.Char8 as B8
+import qualified Data.ByteString.Base64 as B64
 
 import Control.Monad
 import Control.Monad.Trans
@@ -31,18 +34,29 @@ sampleCommands = do
 
   waitFor Page.onLoadEventFired
 
-  screenshot <- waitFor Page.captureScreenshot
+  saveScreenshotAs "gitlab.jpeg"
 
-  case screenshot of
-       Just (Page.CaptureScreenshotResult img) -> liftIO $ writeFile "test-screenshot.txt" img
-       Nothing -> pure ()
+  waitFor $ Page.navigate "http://github.com"
 
-  waitFor Network.enable
+  saveScreenshotAs "github.jpeg"
 
-  forever $ do
-      request <- waitFor Network.onRequestWillBeSent
-      liftIO $ printRequest request
+  waitFor Page.disable
+
+  return ()
+
+  -- waitFor Network.enable
+  --
+  -- forever $ do
+  --     request <- waitFor Network.onRequestWillBeSent
+  --     liftIO $ printRequest request
   where
+    saveScreenshotAs filename = do
+        screenshot <- waitFor $ Page.captureScreenshot (Page.CaptureScreenshotParams "jpeg" 100 True)
+        case screenshot of
+            Just (Page.CaptureScreenshotResult img) -> case B64.decode $ B8.pack img of
+                                                         Right imgContent -> liftIO $ B.writeFile filename imgContent
+                                                         Left _ -> liftIO $ putStrLn "A wild error occured :O"
+
     printRequest :: Network.RequestEvent -> IO ()
     printRequest (Network.RequestEvent (Network.Request url)) = print url
 

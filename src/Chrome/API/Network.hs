@@ -16,10 +16,10 @@ import Chrome.Target.Client
 import Chrome.API.Network.Types
 
 enable :: TargetClient (Maybe Value)
-enable = sendCmd' $ (Method "Network.enable" empty :: Method (Map String String))
+enable = callMethod $ (Method "Network.enable" empty :: Method (Map String String))
 
 disable :: TargetClient (Maybe Value)
-disable = sendCmd' $ (Method "Network.disable" empty :: Method (Map String String))
+disable = callMethod $ (Method "Network.disable" empty :: Method (Map String String))
 
 onRequestWillBeSent :: (RequestEvent -> IO ()) -> TargetClient ()
 onRequestWillBeSent = listenToMethod "Network.requestWillBeSent"

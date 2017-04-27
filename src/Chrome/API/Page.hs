@@ -7,21 +7,21 @@ import Chrome.Target.Message
 import Chrome.Target.Client
 
 enable :: TargetClient (Maybe Value)
-enable = sendCmd' $ Method "Page.enable" (empty :: Map String String)
+enable = callMethod $ Method "Page.enable" (empty :: Map String String)
 
 disable :: TargetClient (Maybe Value)
-disable = sendCmd' $ Method "Page.disable" (empty :: Map String String)
+disable = callMethod $ Method "Page.disable" (empty :: Map String String)
 
 -- TODO : add optional parameters "ignoreCache" and "scriptEvaluatedOnLoad"
 reload :: TargetClient (Maybe Value)
-reload = sendCmd' $ Method "Page.reload" (empty :: Map String String)
+reload = callMethod $ Method "Page.reload" (empty :: Map String String)
 
 navigate :: String -> TargetClient (Maybe Value)
-navigate url = sendCmd' $ Method "Page.navigate" (insert "url" url empty)
+navigate url = callMethod $ Method "Page.navigate" (insert "url" url empty)
 
 -- TODO : add optional parameter "promptText"
 handleJavaScriptDialog :: Bool -> TargetClient (Maybe Value)
-handleJavaScriptDialog accept = sendCmd' $ Method "Page.handleJavaScriptDialog" (insert "accept" accept empty)
+handleJavaScriptDialog accept = callMethod $ Method "Page.handleJavaScriptDialog" (insert "accept" accept empty)
 
 -- TODO : onDomContentEventFired
 

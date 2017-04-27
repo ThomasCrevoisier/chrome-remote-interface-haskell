@@ -48,8 +48,8 @@ dupWSChannels = do
   (chanCmd, chanRes) <- ask
   liftIO . atomically $ (,) <$> dupTChan chanCmd <*> dupTChan chanRes
 
-sendCmd' :: (ToJSON req, Show res, FromJSON res) => Method req -> TargetClient (Maybe res)
-sendCmd' cmd = do
+callMethod :: (ToJSON req, Show res, FromJSON res) => Method req -> TargetClient (Maybe res)
+callMethod cmd = do
   (chanCmd, chanRes) <- dupWSChannels
   msg <- liftIO $ methodToMsg cmd
   liftIO $ atomically $ writeTChan chanCmd (msgToText msg)

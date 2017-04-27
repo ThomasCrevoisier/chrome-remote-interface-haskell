@@ -4,6 +4,8 @@
 module Chrome.Target.Message where
 
 import Data.Aeson
+import Data.Aeson.Types
+
 import Data.Text as T
 import Data.ByteString.Lazy.Char8 as B8
 
@@ -21,6 +23,9 @@ data OutgoingMsg a = OutgoingMsg Int (Method a) deriving Show
 msgId :: OutgoingMsg a -> Int
 msgId (OutgoingMsg id' _) = id'
 
+noParam :: Value
+noParam = emptyObject
+
 instance ToJSON a => ToJSON (OutgoingMsg a) where
   toJSON (OutgoingMsg msgId cmd) = object [ "id" .= msgId
                                           , "method" .= _cmdMethod cmd
@@ -37,6 +42,8 @@ data IncomingMsg a
   = Event (EventResponse a)
   | Result (MethodResult a)
   deriving (Show)
+
+type NoResult = Value
 
 instance FromJSON a => FromJSON (IncomingMsg a) where
   parseJSON v = (Event <$> parseJSON v) <|> (Result <$> parseJSON v)

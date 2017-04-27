@@ -8,7 +8,6 @@ module Chrome.API.Network (
   ) where
 
 import Data.Aeson (Value)
-import Data.Map (Map, empty)
 
 import Control.Concurrent.Async
 
@@ -17,11 +16,11 @@ import Chrome.Target.Client
 
 import Chrome.API.Network.Types
 
-enable :: TargetClient (Maybe Value)
-enable = callMethod $ (Method "Network.enable" empty :: Method (Map String String))
+enable :: TargetClient (Maybe NoResult)
+enable = callMethod $ Method "Network.enable" noParam
 
-disable :: TargetClient (Maybe Value)
-disable = callMethod $ (Method "Network.disable" empty :: Method (Map String String))
+disable :: TargetClient (Maybe NoResult)
+disable = callMethod $ Method "Network.disable" noParam
 
 onRequestWillBeSent :: TargetClientAsync RequestEvent
 onRequestWillBeSent = listenToEventMethod "Network.requestWillBeSent"

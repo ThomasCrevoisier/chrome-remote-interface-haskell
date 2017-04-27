@@ -16,14 +16,14 @@ import Chrome.Target.Client (callMethod, TargetClient)
 
 import Chrome.API.DOM.Types
 
-enable :: TargetClient (Maybe ())
-enable = callMethod $ Method "DOM.enable" ()
+enable :: TargetClient (Maybe NoResult)
+enable = callMethod $ Method "DOM.enable" noParam
 
-disable :: TargetClient (Maybe ())
-disable = callMethod $ Method "DOM.disable" ()
+disable :: TargetClient (Maybe NoResult)
+disable = callMethod $ Method "DOM.disable" noParam
 
 getDocument :: TargetClient (Maybe GetDocumentResponse)
-getDocument = callMethod $ Method "DOM.getDocument" ()
+getDocument = callMethod $ Method "DOM.getDocument" noParam
 
 querySelector :: QuerySelectorParam -> TargetClient (Maybe QuerySelectorResponse)
 querySelector = callMethod . Method "DOM.querySelector"

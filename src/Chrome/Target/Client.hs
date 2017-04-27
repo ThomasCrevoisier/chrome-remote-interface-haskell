@@ -49,12 +49,13 @@ dupWSChannels = do
   (chanCmd, chanRes) <- ask
   liftIO . atomically $ (,) <$> dupTChan chanCmd <*> dupTChan chanRes
 
-callMethod :: (ToJSON req, Show res, FromJSON res) => Method req -> TargetClient (Maybe res)
+callMethod :: (ToJSON req, Show res, FromJSON res) => Method req -> TargetClientAsync (Maybe res)
 callMethod cmd = do
   (chanCmd, chanRes) <- dupWSChannels
   msg <- liftIO $ methodToMsg cmd
-  liftIO $ atomically $ writeTChan chanCmd (msgToText msg)
-  liftIO $ wait =<< async (waitResponse chanRes (msgId msg))
+  liftIO $ do
+      atomically $ writeTChan chanCmd (msgToText msg)
+      async (waitResponse chanRes (msgId msg))
 
   where
     waitResponse :: (FromJSON res) => TChan T.Text -> Int -> IO (Maybe res)

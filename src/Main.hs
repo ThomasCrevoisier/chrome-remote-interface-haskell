@@ -24,8 +24,8 @@ head' _ = Nothing
 
 sampleCommands :: TargetClient ()
 sampleCommands = do
-  Page.navigate "http://gitlab.com"
-  Network.enable
+  wait <$> Page.navigate "http://gitlab.com"
+  wait <$> Network.enable
 
   forever $ do
       requestAsync <- Network.onRequestWillBeSent

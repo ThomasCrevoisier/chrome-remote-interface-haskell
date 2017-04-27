@@ -12,21 +12,21 @@ module Chrome.API.DOM (
 import Data.Aeson
 
 import Chrome.Target.Message
-import Chrome.Target.Client (callMethod, TargetClient)
+import Chrome.Target.Client (callMethod, TargetClientAsync)
 
 import Chrome.API.DOM.Types
 
-enable :: TargetClient (Maybe NoResult)
+enable :: TargetClientAsync (Maybe NoResult)
 enable = callMethod $ Method "DOM.enable" noParam
 
-disable :: TargetClient (Maybe NoResult)
+disable :: TargetClientAsync (Maybe NoResult)
 disable = callMethod $ Method "DOM.disable" noParam
 
-getDocument :: TargetClient (Maybe GetDocumentResponse)
+getDocument :: TargetClientAsync (Maybe GetDocumentResponse)
 getDocument = callMethod $ Method "DOM.getDocument" noParam
 
-querySelector :: QuerySelectorParam -> TargetClient (Maybe QuerySelectorResponse)
+querySelector :: QuerySelectorParam -> TargetClientAsync (Maybe QuerySelectorResponse)
 querySelector = callMethod . Method "DOM.querySelector"
 
-querySelectorAll :: QuerySelectorParam -> TargetClient (Maybe QuerySelectorAllResponse)
+querySelectorAll :: QuerySelectorParam -> TargetClientAsync (Maybe QuerySelectorAllResponse)
 querySelectorAll = callMethod . Method "DOM.querySelectorAll"

@@ -5,21 +5,21 @@ import Data.Map (Map, empty, insert)
 import Chrome.Target.Message
 import Chrome.Target.Client
 
-enable :: TargetClient (Maybe NoResult)
+enable :: TargetClientAsync (Maybe NoResult)
 enable = callMethod $ Method "Page.enable" noParam
 
-disable :: TargetClient (Maybe NoResult)
+disable :: TargetClientAsync (Maybe NoResult)
 disable = callMethod $ Method "Page.disable" noParam
 
 -- TODO : add optional parameters "ignoreCache" and "scriptEvaluatedOnLoad"
-reload :: TargetClient (Maybe NoResult)
+reload :: TargetClientAsync (Maybe NoResult)
 reload = callMethod $ Method "Page.reload" noParam
 
-navigate :: String -> TargetClient (Maybe NoResult)
+navigate :: String -> TargetClientAsync (Maybe NoResult)
 navigate url = callMethod $ Method "Page.navigate" (insert "url" url empty)
 
 -- TODO : add optional parameter "promptText"
-handleJavaScriptDialog :: Bool -> TargetClient (Maybe NoResult)
+handleJavaScriptDialog :: Bool -> TargetClientAsync (Maybe NoResult)
 handleJavaScriptDialog accept = callMethod $ Method "Page.handleJavaScriptDialog" (insert "accept" accept empty)
 
 -- TODO : onDomContentEventFired

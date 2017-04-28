@@ -48,12 +48,12 @@ type NoResult = Value
 instance FromJSON a => FromJSON (IncomingMsg a) where
   parseJSON v = (Event <$> parseJSON v) <|> (Result <$> parseJSON v)
 
-data EventResponse a = EventResponse { _eventMethod :: String, _eventContent :: a } deriving Show
+data EventResponse a = EventResponse { _eventMethod :: String, _eventContent :: MethodResult a } deriving Show
 
 instance FromJSON a => FromJSON (EventResponse a) where
   parseJSON = withObject "response" $ \o -> EventResponse
                                             <$> o .: "method"
-                                            <*> o .: "params"
+                                            <*> ((Right <$> o .: "params") <|> ((Left . ResponseMsgError) <$> o .: "error") <|> (pure $ Left ResponseParsingError))
 
 data MethodResponse a = MethodResponse { _resId :: Int
                                        , _resResult :: MethodResult a

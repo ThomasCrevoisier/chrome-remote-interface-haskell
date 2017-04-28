@@ -73,12 +73,12 @@ waitFor action = liftIO . wait =<< action
 
 type TargetClientAsync res = TargetClient (Async res)
 
-listenToEventMethod :: (FromJSON res) => String -> TargetClientAsync res
+listenToEventMethod :: (FromJSON res) => String -> TargetClientAsync (MethodResult res)
 listenToEventMethod method = do
     (_, chanRes) <- dupWSChannels
     liftIO $ async $ waitForMsg method chanRes
     where
-        waitForMsg :: (FromJSON res) => String -> TChan T.Text -> IO res
+        waitForMsg :: (FromJSON res) => String -> TChan T.Text -> IO (MethodResult res)
         waitForMsg method inChan = do
             res <- atomically $ readTChan inChan
             let event = decode . B8.pack . T.unpack $ res

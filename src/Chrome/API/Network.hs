@@ -22,5 +22,5 @@ enable = callMethod $ Method "Network.enable" noParam
 disable :: TargetClientAsync (MethodResult ())
 disable = callMethod $ Method "Network.disable" noParam
 
-onRequestWillBeSent :: TargetClientAsync RequestEvent
+onRequestWillBeSent :: TargetClientAsync (MethodResult RequestEvent)
 onRequestWillBeSent = listenToEventMethod "Network.requestWillBeSent"

@@ -36,7 +36,7 @@ handleJavaScriptDialog accept = callMethod $ Method "Page.handleJavaScriptDialog
 captureScreenshot :: CaptureScreenshotParams -> TargetClientAsync (MethodResult CaptureScreenshotResult)
 captureScreenshot params = callMethod $ Method "Page.captureScreenshot" params
 
-onLoadEventFired :: TargetClientAsync (Maybe NoResult)
+onLoadEventFired :: TargetClientAsync (MethodResult ())
 onLoadEventFired = listenToEventMethod "Page.loadEventFired"
 
 -- TODO : onDomContentEventFired

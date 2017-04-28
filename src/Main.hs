@@ -2,16 +2,10 @@
 
 module Main where
 
-
 import Data.Maybe
 import Data.Foldable (traverse_)
-import qualified Data.ByteString as B
-import qualified Data.ByteString.Char8 as B8
-import qualified Data.ByteString.Base64 as B64
 
-import Control.Monad
-import Control.Monad.Trans
-import Control.Monad.Trans.Reader
+import Control.Monad.Trans (liftIO)
 
 import Chrome.Target
 import Chrome.Target.Client
@@ -27,7 +21,7 @@ head' _ = Nothing
 
 sampleCommands :: TargetClient ()
 sampleCommands = do
-  traverse waitFor [Page.enable, Network.enable]
+  traverse_ waitFor [Page.enable, Network.enable]
 
   listener <- onEvent Network.onRequestWillBeSent (liftIO . printRequest)
 

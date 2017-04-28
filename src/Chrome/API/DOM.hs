@@ -16,17 +16,17 @@ import Chrome.Target.Client (callMethod, TargetClientAsync)
 
 import Chrome.API.DOM.Types
 
-enable :: TargetClientAsync (Maybe NoResult)
+enable :: TargetClientAsync (MethodResult ())
 enable = callMethod $ Method "DOM.enable" noParam
 
-disable :: TargetClientAsync (Maybe NoResult)
+disable :: TargetClientAsync (MethodResult ())
 disable = callMethod $ Method "DOM.disable" noParam
 
-getDocument :: TargetClientAsync (Maybe GetDocumentResponse)
+getDocument :: TargetClientAsync (MethodResult GetDocumentResponse)
 getDocument = callMethod $ Method "DOM.getDocument" noParam
 
-querySelector :: QuerySelectorParam -> TargetClientAsync (Maybe QuerySelectorResponse)
+querySelector :: QuerySelectorParam -> TargetClientAsync (MethodResult QuerySelectorResponse)
 querySelector = callMethod . Method "DOM.querySelector"
 
-querySelectorAll :: QuerySelectorParam -> TargetClientAsync (Maybe QuerySelectorAllResponse)
+querySelectorAll :: QuerySelectorParam -> TargetClientAsync (MethodResult QuerySelectorAllResponse)
 querySelectorAll = callMethod . Method "DOM.querySelectorAll"

@@ -40,7 +40,7 @@ methodToMsg cmd = flip OutgoingMsg cmd <$> (abs <$> randomRIO (1, 2000000))
 
 data IncomingMsg a
   = Event (EventResponse a)
-  | Result (MethodResult a)
+  | Result (MethodResponse a)
   deriving (Show)
 
 type NoResult = Value
@@ -55,11 +55,27 @@ instance FromJSON a => FromJSON (EventResponse a) where
                                             <$> o .: "method"
                                             <*> o .: "params"
 
-data MethodResult a = MethodResult { _resId :: Int
-                                   , _resResult :: a
-                                   } deriving Show
+data MethodResponse a = MethodResponse { _resId :: Int
+                                       , _resResult :: MethodResult a
+                                       } deriving Show
 
-instance FromJSON a => FromJSON (MethodResult a) where
-  parseJSON = withObject "response" $ \o -> MethodResult
+type MethodResult a = Either ResponseError a
+
+data ResponseError
+  = ResponseParsingError
+  | ResponseMsgError ErrorMsg
+  deriving Show
+
+data ErrorMsg
+  = ErrorMsg { _errCode :: Int
+             , _errMessage :: String
+             , _errData :: String
+             } deriving Show
+
+instance FromJSON ErrorMsg where
+  parseJSON = withObject "error" $ \o -> ErrorMsg <$> o .: "code" <*> o .: "message" <*> o .: "data"
+
+instance FromJSON a => FromJSON (MethodResponse a) where
+  parseJSON = withObject "response" $ \o -> MethodResponse
                                             <$> o .: "id"
-                                            <*> o .: "result"
+                                            <*> ((Right <$> o .: "result") <|> ((Left . ResponseMsgError) <$> o .: "error") <|> (pure $ Left ResponseParsingError))

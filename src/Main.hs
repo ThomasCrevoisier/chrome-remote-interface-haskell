@@ -53,9 +53,10 @@ sampleCommands = do
     saveScreenshotAs filename = do
         screenshot <- waitFor $ Page.captureScreenshot (Page.CaptureScreenshotParams "jpeg" 100 True)
         case screenshot of
-            Just (Page.CaptureScreenshotResult img) -> case B64.decode $ B8.pack img of
+            Right (Page.CaptureScreenshotResult img) -> case B64.decode $ B8.pack img of
                                                          Right imgContent -> liftIO $ B.writeFile filename imgContent
                                                          Left _ -> liftIO $ putStrLn "A wild error occured :O"
+            Left err -> liftIO $ print err
 
     printRequest :: Network.RequestEvent -> IO ()
     printRequest (Network.RequestEvent (Network.Request url)) = print url

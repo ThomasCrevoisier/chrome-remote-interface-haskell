@@ -4,6 +4,7 @@ module Main where
 
 
 import Data.Maybe
+import Data.Foldable (traverse_)
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Char8 as B8
 import qualified Data.ByteString.Base64 as B64
@@ -12,10 +13,9 @@ import Control.Monad
 import Control.Monad.Trans
 import Control.Monad.Trans.Reader
 
-import Control.Concurrent.Async
-
 import Chrome.Target
 import Chrome.Target.Client
+import Chrome.Target.Async (waitFor, onEvent, stopEventListener)
 
 import qualified Chrome.API.Page as Page
 import qualified Chrome.API.DOM as DOM
@@ -27,39 +27,20 @@ head' _ = Nothing
 
 sampleCommands :: TargetClient ()
 sampleCommands = do
+  traverse waitFor [Page.enable, Network.enable]
 
-  waitFor Page.enable
+  listener <- onEvent Network.onRequestWillBeSent (liftIO . printRequest)
 
   waitFor $ Page.navigate "http://gitlab.com"
+  waitFor $ Page.onLoadEventFired
 
-  waitFor Page.onLoadEventFired
+  stopEventListener listener
 
-  saveScreenshotAs "gitlab.jpeg"
+  traverse_ waitFor [Page.disable, Network.disable]
 
-  waitFor $ Page.navigate "http://github.com"
-
-  saveScreenshotAs "github.jpeg"
-
-  waitFor Page.disable
-
-  return ()
-
-  -- waitFor Network.enable
-  --
-  -- forever $ do
-  --     request <- waitFor Network.onRequestWillBeSent
-  --     liftIO $ printRequest request
   where
-    saveScreenshotAs filename = do
-        screenshot <- waitFor $ Page.captureScreenshot (Page.CaptureScreenshotParams "jpeg" 100 True)
-        case screenshot of
-            Right (Page.CaptureScreenshotResult img) -> case B64.decode $ B8.pack img of
-                                                         Right imgContent -> liftIO $ B.writeFile filename imgContent
-                                                         Left _ -> liftIO $ putStrLn "A wild error occured :O"
-            Left err -> liftIO $ print err
-
-    printRequest :: Network.RequestEvent -> IO ()
-    printRequest (Network.RequestEvent (Network.Request url)) = print url
+    printRequest (Right (Network.RequestEvent (Network.Request url))) = print url
+    printRequest _ = putStrLn "Oopsy"
 
 main :: IO ()
 main = do

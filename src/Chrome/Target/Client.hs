@@ -68,8 +68,6 @@ callMethod cmd = do
                                   else waitResponse chanRes' id'
         _ -> waitResponse chanRes' id'
 
-waitFor :: TargetClientAsync a -> TargetClient a
-waitFor action = liftIO . wait =<< action
 
 type TargetClientAsync res = TargetClient (Async res)
 

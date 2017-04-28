@@ -20,6 +20,7 @@ executable chrome-remote-interface-haskell
                      , Chrome.Target.DebuggingURL
                      , Chrome.Target.Client
                      , Chrome.Target.Message
+                     , Chrome.Target.Async
                      , Chrome.API.Page
                      , Chrome.API.Page.Types
                      , Chrome.API.DOM
@@ -39,6 +40,7 @@ executable chrome-remote-interface-haskell
                      , base64-bytestring
                      , containers
                      , async
+                     , lifted-async
                      , transformers
                      , random
                      , stm

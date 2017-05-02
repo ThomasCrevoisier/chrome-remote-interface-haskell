@@ -26,13 +26,11 @@ instance ToJSON PageHandleDialogParams where
                                                              , "promptText" .= promptText
                                                              ]
 
-data PageNavigateResult = PageNavigateResult
-                          {
-                            _pFrameId :: String
-                          } deriving Show
+newtype FrameId = FrameId String
+                  deriving Show
 
-instance FromJSON PageNavigateResult where
-  parseJSON = withObject "frame" $ \o -> PageNavigateResult <$> o .: "frameId"
+instance FromJSON FrameId where
+  parseJSON = withObject "frame" $ \o -> FrameId <$> o .: "frameId"
 
 data CaptureScreenshotParams = CaptureScreenshotParams
                                 {
@@ -60,3 +58,35 @@ newtype TimestampEvent = TimestampEvent Int
 
 instance FromJSON TimestampEvent where
   parseJSON = withObject "timestamp" $ \o -> TimestampEvent <$> o .: "timestamp"
+
+data FrameAttachedEvent = FrameAttachedEvent
+                          {
+                            _eventFrameId :: String
+                          , _eventParentFrameId :: String
+                          } deriving Show
+
+instance FromJSON FrameAttachedEvent where
+  parseJSON = withObject "params" $ \o -> FrameAttachedEvent
+                                          <$> o .: "frameId"
+                                          <*> o .: "parentFrameId"
+
+data Frame = Frame
+             {
+               _frameId :: String
+             , _frameParentId :: Maybe String
+             , _frameLoaderId :: String
+             , _frameName :: Maybe String
+             , _frameUrl :: String
+             , _frameSecurityOrigin :: String
+             , _frameMimeType :: String
+             } deriving Show
+
+instance FromJSON Frame where
+  parseJSON = withObject "frame" $ \o -> Frame
+                                         <$> o .: "id"
+                                         <*> o .:? "parentId"
+                                         <*> o .: "loaderId"
+                                         <*> o .:? "name"
+                                         <*> o .: "url"
+                                         <*> o .: "securityOrigin"
+                                         <*> o .: "mimeType"

@@ -25,7 +25,7 @@ disable = callMethod $ Method "Page.disable" noParam
 reload :: PageReloadParams -> TargetClientAsync (MethodResult AnyResult)
 reload = callMethod . Method "Page.reload"
 
-navigate :: String -> TargetClientAsync (MethodResult PageNavigateResult)
+navigate :: String -> TargetClientAsync (MethodResult FrameId)
 navigate url = callMethod $ Method "Page.navigate" (insert "url" url empty)
 
 handleJavaScriptDialog :: PageHandleDialogParams -> TargetClientAsync (MethodResult AnyResult)
@@ -40,6 +40,14 @@ onDomContentEventFired = listenToEventMethod "Page.domContentEventFired"
 onLoadEventFired :: TargetClientAsync (MethodResult TimestampEvent)
 onLoadEventFired = listenToEventMethod "Page.loadEventFired"
 
+onFrameAttached :: TargetClientAsync (MethodResult FrameAttachedEvent)
+onFrameAttached = listenToEventMethod "Page.frameAttached"
+
+onFrameNavigated :: TargetClientAsync (MethodResult Frame)
+onFrameNavigated = listenToEventMethod "Page.frameNavigated"
+
+onFrameDetached :: TargetClientAsync (MethodResult FrameId)
+onFrameDetached = listenToEventMethod "Page.frameDetached"
 -- TODO : onDomContentEventFired
 
 -- TODO : onLoadEventFired

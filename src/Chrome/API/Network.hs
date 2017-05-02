@@ -45,3 +45,6 @@ clearBrowserCookies = callMethod $ Method "Network.clearBrowserCookies" noParam
 
 emulateNetworkConditions :: NetworkConditionsParams -> TargetClientAsync (MethodResult AnyResult)
 emulateNetworkConditions = callMethod . Method "Network.emulateNetworkConditions"
+
+setCacheDisabled :: Bool -> TargetClientAsync (MethodResult AnyResult)
+setCacheDisabled disabled = callMethod $ Method "Network.setCacheDisabled" (insert "cacheDisabled"disabled empty)

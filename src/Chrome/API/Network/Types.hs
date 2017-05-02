@@ -46,3 +46,20 @@ newtype CanClear = CanClear Bool
 
 instance FromJSON CanClear where
   parseJSON = withObject "response" $ \o -> CanClear <$> o .: "result"
+
+data NetworkConditionsParams = NetworkConditionsParams
+                               {
+                                 _netOffline :: Bool
+                               , _netLatency :: Int
+                               , _netDownloadThroughput :: Int
+                               , _netUploadThroughput :: Int
+                               , _netConnectionType :: Maybe String
+                               } deriving Show
+
+instance ToJSON NetworkConditionsParams where
+  toJSON (NetworkConditionsParams offline latency dl ul connType) = object [ "offline" .= offline
+                                                                           , "latency" .= latency
+                                                                           , "downloadThroughput" .= dl
+                                                                           , "uploadThroughput" .= ul
+                                                                           , "connectionType" .= connType
+                                                                           ]

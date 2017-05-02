@@ -42,3 +42,6 @@ canClearBrowserCookies = callMethod $ Method "Network.canClearBrowserCookies" no
 
 clearBrowserCookies :: TargetClientAsync (MethodResult AnyResult)
 clearBrowserCookies = callMethod $ Method "Network.clearBrowserCookies" noParam
+
+emulateNetworkConditions :: NetworkConditionsParams -> TargetClientAsync (MethodResult AnyResult)
+emulateNetworkConditions = callMethod . Method "Network.emulateNetworkConditions"

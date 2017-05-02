@@ -22,19 +22,17 @@ enable = callMethod $ Method "Page.enable" noParam
 disable :: TargetClientAsync (MethodResult ())
 disable = callMethod $ Method "Page.disable" noParam
 
--- TODO : add optional parameters "ignoreCache" and "scriptEvaluatedOnLoad"
-reload :: TargetClientAsync (MethodResult ())
-reload = callMethod $ Method "Page.reload" noParam
+reload :: PageReloadParams -> TargetClientAsync (MethodResult ())
+reload = callMethod . Method "Page.reload"
 
 navigate :: String -> TargetClientAsync (MethodResult ())
 navigate url = callMethod $ Method "Page.navigate" (insert "url" url empty)
 
--- TODO : add optional parameter "promptText"
-handleJavaScriptDialog :: Bool -> TargetClientAsync (MethodResult ())
-handleJavaScriptDialog accept = callMethod $ Method "Page.handleJavaScriptDialog" (insert "accept" accept empty)
+handleJavaScriptDialog :: PageHandleDialogParams -> TargetClientAsync (MethodResult ())
+handleJavaScriptDialog = callMethod . Method "Page.handleJavaScriptDialog"
 
 captureScreenshot :: CaptureScreenshotParams -> TargetClientAsync (MethodResult CaptureScreenshotResult)
-captureScreenshot params = callMethod $ Method "Page.captureScreenshot" params
+captureScreenshot = callMethod . Method "Page.captureScreenshot"
 
 onLoadEventFired :: TargetClientAsync (MethodResult ())
 onLoadEventFired = listenToEventMethod "Page.loadEventFired"

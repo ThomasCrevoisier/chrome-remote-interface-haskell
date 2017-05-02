@@ -27,12 +27,12 @@ socketClient :: (TChan T.Text, TChan T.Text) -> WS.ClientApp ()
 socketClient (inChan, outChan) conn = do
   readProc <- async $ forever $ do
     msgReceived <- WS.receiveData conn
-    -- T.putStrLn msgReceived >> putStrLn "\n\n"
+    T.putStrLn msgReceived >> putStrLn "\n\n"
     atomically $ writeTChan outChan msgReceived
 
   writeProc <- async $ forever $ do
     msg <- atomically $ readTChan inChan
-    -- T.putStrLn msg >> putStrLn "\n\n"
+    T.putStrLn msg >> putStrLn "\n\n"
     WS.sendTextData conn msg
 
   mapM_ wait [readProc, writeProc]

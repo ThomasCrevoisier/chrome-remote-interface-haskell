@@ -54,3 +54,9 @@ data CaptureScreenshotResult = CaptureScreenshotResult
 
 instance FromJSON CaptureScreenshotResult where
     parseJSON = withObject "screenshot" $ \o -> CaptureScreenshotResult <$> o .: "data"
+
+newtype TimestampEvent = TimestampEvent Int
+                         deriving Show
+
+instance FromJSON TimestampEvent where
+  parseJSON = withObject "timestamp" $ \o -> TimestampEvent <$> o .: "timestamp"

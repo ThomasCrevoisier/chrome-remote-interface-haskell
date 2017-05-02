@@ -4,6 +4,19 @@ module Chrome.API.Network.Types where
 
 import Data.Aeson
 
+data NetworkEnableParams = NetworkEnableParams
+                           {
+                             _netMaxTotalBufferSize :: Maybe Int
+                           , _netMaxResourceBufferSize :: Maybe Int
+                           } deriving Show
+
+defaultEnableParams = NetworkEnableParams Nothing Nothing
+
+instance ToJSON NetworkEnableParams where
+  toJSON (NetworkEnableParams total resources) = object [ "maxTotalBufferSize" .= total
+                                                        , "maxResourceBufferSize" .= resources
+                                                        ]
+
 data RequestEvent = RequestEvent { _eventRequest :: Request } deriving Show
 
 instance FromJSON RequestEvent where

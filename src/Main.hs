@@ -21,7 +21,7 @@ head' _ = Nothing
 
 sampleCommands :: TargetClient ()
 sampleCommands = do
-  traverse_ waitFor [Page.enable, Network.enable]
+  traverse_ waitFor [Page.enable, Network.enable Network.defaultEnableParams]
 
   listener <- onEvent Network.onRequestWillBeSent (liftIO . printRequest)
 

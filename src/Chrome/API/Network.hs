@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Chrome.API.Network (
     module Chrome.API.Network.Types
   , enable
@@ -8,8 +6,7 @@ module Chrome.API.Network (
   ) where
 
 import Data.Aeson (Value)
-
-import Control.Concurrent.Async
+import Data.Map (Map, empty, insert)
 
 import Chrome.Target.Message
 import Chrome.Target.Client
@@ -21,6 +18,9 @@ enable = callMethod . Method "Network.enable"
 
 disable :: TargetClientAsync (MethodResult AnyResult)
 disable = callMethod $ Method "Network.disable" noParam
+
+setUserAgentOverride :: String -> TargetClientAsync (MethodResult AnyResult)
+setUserAgentOverride userAgent = callMethod $ Method "Network.setUserAgentOverride" (insert "userAgent" userAgent empty)
 
 onRequestWillBeSent :: TargetClientAsync (MethodResult RequestEvent)
 onRequestWillBeSent = listenToEventMethod "Network.requestWillBeSent"

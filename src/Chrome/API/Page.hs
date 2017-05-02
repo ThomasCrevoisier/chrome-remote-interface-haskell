@@ -55,13 +55,11 @@ onJavascriptDialogOpening = listenToEventMethod "Page.javascriptDialogOpening"
 onJavascriptDialogClosed :: TargetClientAsync (MethodResult DialogClosingEvent)
 onJavascriptDialogClosed = listenToEventMethod "Page.javascriptDialogClosed"
 
--- TODO : onInterstitialShown
+onInterstitialShown :: TargetClientAsync (MethodResult AnyResult)
+onInterstitialShown = listenToEventMethod "Page.interstitialShown"
 
--- TODO : onInterstitialHidden
+onInterstitialHidden :: TargetClientAsync (MethodResult AnyResult)
+onInterstitialHidden = listenToEventMethod "Page.interstitialHidden"
 
--- TODO : onNavigationRequested
-
--- TODO : types
--- - ResourceType
--- - FrameId
--- - Frame
+onNavigationRequested :: TargetClientAsync (MethodResult NavigationRequestEvent)
+onNavigationRequested = listenToEventMethod "Page.navigationRequested"

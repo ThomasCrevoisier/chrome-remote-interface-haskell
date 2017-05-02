@@ -109,3 +109,19 @@ newtype DialogClosingEvent = DialogClosingEvent Bool
 
 instance FromJSON DialogClosingEvent where
   parseJSON = withObject "param" $ \o -> DialogClosingEvent <$> o .: "result"
+
+data NavigationRequestEvent = NavigationRequestEvent
+                              {
+                                _navIsInMainFrame :: Bool
+                              , _navIsRedirect :: Bool
+                              , _navNavigationId :: Int
+                              , _navUrl :: String
+                              } deriving Show
+
+instance FromJSON NavigationRequestEvent where
+  parseJSON = withObject "navigation" $ \o -> NavigationRequestEvent
+                                              <$> o .: "isInMainFrame"
+                                              <*> o .: "isRedirect"
+                                              <*> o .: "navigationId"
+                                              <*> o .: "url"
+

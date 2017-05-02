@@ -6,7 +6,16 @@ module Chrome.API.Page (
     , navigate
     , handleJavaScriptDialog
     , captureScreenshot
+    , onDomContentEventFired
     , onLoadEventFired
+    , onFrameAttached
+    , onFrameNavigated
+    , onFrameDetached
+    , onJavascriptDialogOpening
+    , onJavascriptDialogClosed
+    , onInterstitialShown
+    , onInterstitialHidden
+    , onNavigationRequested
     ) where
 
 import Data.Map (Map, empty, insert)

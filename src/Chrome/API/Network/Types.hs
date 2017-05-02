@@ -29,3 +29,14 @@ instance FromJSON Request where
   parseJSON = withObject "request" $ \o -> Request <$> o .: "url"
 
 type Headers = Map String String
+
+data ResponseBody = ResponseBody
+                    {
+                      _resBody :: String
+                    , _resBase64Encoded :: Bool
+                    } deriving Show
+
+instance FromJSON ResponseBody where
+  parseJSON = withObject "response" $ \o -> ResponseBody
+                                           <$> o .: "body"
+                                           <*> o .: "base64Encoded"

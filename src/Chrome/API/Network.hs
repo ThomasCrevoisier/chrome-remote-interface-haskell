@@ -25,5 +25,8 @@ setUserAgentOverride userAgent = callMethod $ Method "Network.setUserAgentOverri
 setExtraHTTPHeaders :: Headers -> TargetClientAsync (MethodResult AnyResult)
 setExtraHTTPHeaders = callMethod . Method "Network.setExtraHTTPHeaders"
 
+getResponseBody :: String -> TargetClientAsync (MethodResult ResponseBody)
+getResponseBody requestId = callMethod $ Method "Network.getResponseBody" (insert "requestId" requestId empty)
+
 onRequestWillBeSent :: TargetClientAsync (MethodResult RequestEvent)
 onRequestWillBeSent = listenToEventMethod "Network.requestWillBeSent"

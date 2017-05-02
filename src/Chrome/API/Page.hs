@@ -48,19 +48,12 @@ onFrameNavigated = listenToEventMethod "Page.frameNavigated"
 
 onFrameDetached :: TargetClientAsync (MethodResult FrameId)
 onFrameDetached = listenToEventMethod "Page.frameDetached"
--- TODO : onDomContentEventFired
 
--- TODO : onLoadEventFired
+onJavascriptDialogOpening :: TargetClientAsync (MethodResult DialogOpeningEvent)
+onJavascriptDialogOpening = listenToEventMethod "Page.javascriptDialogOpening"
 
--- TODO : onFrameAttached
-
--- TODO : onFrameNavigated
-
--- TODO : onFrameDetached
-
--- TODO : onJavascriptDialogOpening
-
--- TODO : onJavascriptDialogClosed
+onJavascriptDialogClosed :: TargetClientAsync (MethodResult DialogClosingEvent)
+onJavascriptDialogClosed = listenToEventMethod "Page.javascriptDialogClosed"
 
 -- TODO : onInterstitialShown
 

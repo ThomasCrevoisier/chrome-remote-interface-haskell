@@ -90,3 +90,22 @@ instance FromJSON Frame where
                                          <*> o .: "url"
                                          <*> o .: "securityOrigin"
                                          <*> o .: "mimeType"
+
+type DialogType = String
+
+data DialogOpeningEvent = DialogOpeningEvent
+                          {
+                            _dialogText :: String
+                          , _dialogType :: DialogType
+                          } deriving Show
+
+instance FromJSON DialogOpeningEvent where
+  parseJSON = withObject "dialog" $ \o -> DialogOpeningEvent
+                                          <$> o .: "message"
+                                          <*> o .: "type"
+
+newtype DialogClosingEvent = DialogClosingEvent Bool
+                             deriving Show
+
+instance FromJSON DialogClosingEvent where
+  parseJSON = withObject "param" $ \o -> DialogClosingEvent <$> o .: "result"

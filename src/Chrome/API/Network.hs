@@ -30,3 +30,15 @@ getResponseBody requestId = callMethod $ Method "Network.getResponseBody" (inser
 
 onRequestWillBeSent :: TargetClientAsync (MethodResult RequestEvent)
 onRequestWillBeSent = listenToEventMethod "Network.requestWillBeSent"
+
+canClearBrowserCache :: TargetClientAsync (MethodResult CanClear)
+canClearBrowserCache = callMethod $ Method "Network.canClearBrowserCache" noParam
+
+clearBrowserCache :: TargetClientAsync (MethodResult AnyResult)
+clearBrowserCache = callMethod $ Method "Network.clearBrowserCache" noParam
+
+canClearBrowserCookies :: TargetClientAsync (MethodResult CanClear)
+canClearBrowserCookies = callMethod $ Method "Network.canClearBrowserCookies" noParam
+
+clearBrowserCookies :: TargetClientAsync (MethodResult AnyResult)
+clearBrowserCookies = callMethod $ Method "Network.clearBrowserCookies" noParam

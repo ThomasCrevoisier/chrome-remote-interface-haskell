@@ -40,3 +40,9 @@ instance FromJSON ResponseBody where
   parseJSON = withObject "response" $ \o -> ResponseBody
                                            <$> o .: "body"
                                            <*> o .: "base64Encoded"
+
+newtype CanClear = CanClear Bool
+                   deriving Show
+
+instance FromJSON CanClear where
+  parseJSON = withObject "response" $ \o -> CanClear <$> o .: "result"

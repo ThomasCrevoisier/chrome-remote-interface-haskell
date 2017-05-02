@@ -22,5 +22,8 @@ disable = callMethod $ Method "Network.disable" noParam
 setUserAgentOverride :: String -> TargetClientAsync (MethodResult AnyResult)
 setUserAgentOverride userAgent = callMethod $ Method "Network.setUserAgentOverride" (insert "userAgent" userAgent empty)
 
+setExtraHTTPHeaders :: Headers -> TargetClientAsync (MethodResult AnyResult)
+setExtraHTTPHeaders = callMethod . Method "Network.setExtraHTTPHeaders"
+
 onRequestWillBeSent :: TargetClientAsync (MethodResult RequestEvent)
 onRequestWillBeSent = listenToEventMethod "Network.requestWillBeSent"

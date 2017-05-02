@@ -3,6 +3,7 @@
 module Chrome.API.Network.Types where
 
 import Data.Aeson
+import Data.Map (Map)
 
 data NetworkEnableParams = NetworkEnableParams
                            {
@@ -26,3 +27,5 @@ data Request = Request { _reqUrl :: String } deriving Show
 
 instance FromJSON Request where
   parseJSON = withObject "request" $ \o -> Request <$> o .: "url"
+
+type Headers = Map String String

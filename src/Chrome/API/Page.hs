@@ -16,19 +16,19 @@ import Chrome.Target.Client
 
 import Chrome.API.Page.Types
 
-enable :: TargetClientAsync (MethodResult ())
+enable :: TargetClientAsync (MethodResult AnyResult)
 enable = callMethod $ Method "Page.enable" noParam
 
-disable :: TargetClientAsync (MethodResult ())
+disable :: TargetClientAsync (MethodResult AnyResult)
 disable = callMethod $ Method "Page.disable" noParam
 
-reload :: PageReloadParams -> TargetClientAsync (MethodResult ())
+reload :: PageReloadParams -> TargetClientAsync (MethodResult AnyResult)
 reload = callMethod . Method "Page.reload"
 
-navigate :: String -> TargetClientAsync (MethodResult ())
+navigate :: String -> TargetClientAsync (MethodResult PageNavigateResult)
 navigate url = callMethod $ Method "Page.navigate" (insert "url" url empty)
 
-handleJavaScriptDialog :: PageHandleDialogParams -> TargetClientAsync (MethodResult ())
+handleJavaScriptDialog :: PageHandleDialogParams -> TargetClientAsync (MethodResult AnyResult)
 handleJavaScriptDialog = callMethod . Method "Page.handleJavaScriptDialog"
 
 captureScreenshot :: CaptureScreenshotParams -> TargetClientAsync (MethodResult CaptureScreenshotResult)

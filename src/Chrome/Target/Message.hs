@@ -43,7 +43,7 @@ data IncomingMsg a
   | Result (MethodResponse a)
   deriving (Show)
 
-type NoResult = Value
+type AnyResult = Value
 
 instance FromJSON a => FromJSON (IncomingMsg a) where
   parseJSON v = (Event <$> parseJSON v) <|> (Result <$> parseJSON v)

@@ -26,6 +26,14 @@ instance ToJSON PageHandleDialogParams where
                                                              , "promptText" .= promptText
                                                              ]
 
+data PageNavigateResult = PageNavigateResult
+                          {
+                            _pFrameId :: String
+                          } deriving Show
+
+instance FromJSON PageNavigateResult where
+  parseJSON = withObject "frame" $ \o -> PageNavigateResult <$> o .: "frameId"
+
 data CaptureScreenshotParams = CaptureScreenshotParams
                                 {
                                   _pScreenshotFormat :: String

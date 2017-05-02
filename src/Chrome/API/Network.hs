@@ -16,10 +16,10 @@ import Chrome.Target.Client
 
 import Chrome.API.Network.Types
 
-enable :: TargetClientAsync (MethodResult ())
+enable :: TargetClientAsync (MethodResult AnyResult)
 enable = callMethod $ Method "Network.enable" noParam
 
-disable :: TargetClientAsync (MethodResult ())
+disable :: TargetClientAsync (MethodResult AnyResult)
 disable = callMethod $ Method "Network.disable" noParam
 
 onRequestWillBeSent :: TargetClientAsync (MethodResult RequestEvent)

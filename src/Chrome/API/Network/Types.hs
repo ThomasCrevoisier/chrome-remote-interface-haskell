@@ -1,45 +1,43 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE DuplicateRecordFields #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 module Chrome.API.Network.Types where
 
 import Data.Aeson
+import Data.Aeson.TH
 import Data.Map (Map)
 
 data NetworkEnableParams = NetworkEnableParams
                            {
-                             _netMaxTotalBufferSize :: Maybe Int
-                           , _netMaxResourceBufferSize :: Maybe Int
+                             maxTotalBufferSize :: Maybe Int
+                           , maxResourceBufferSize :: Maybe Int
                            } deriving Show
+
+$(deriveJSON defaultOptions{ omitNothingFields = True } ''NetworkEnableParams)
+
 
 defaultEnableParams = NetworkEnableParams Nothing Nothing
 
-instance ToJSON NetworkEnableParams where
-  toJSON (NetworkEnableParams total resources) = object [ "maxTotalBufferSize" .= total
-                                                        , "maxResourceBufferSize" .= resources
-                                                        ]
+data Request = Request { url :: String }
+               deriving Show
 
-data RequestEvent = RequestEvent { _eventRequest :: Request } deriving Show
+$(deriveJSON defaultOptions{ omitNothingFields = True } ''Request)
 
-instance FromJSON RequestEvent where
-  parseJSON = withObject "response" $ \o -> RequestEvent <$> o .: "request"
+data RequestEvent = RequestEvent { request :: Request }
+                    deriving Show
 
-data Request = Request { _reqUrl :: String } deriving Show
-
-instance FromJSON Request where
-  parseJSON = withObject "request" $ \o -> Request <$> o .: "url"
+$(deriveJSON defaultOptions{ omitNothingFields = True } ''RequestEvent)
 
 type Headers = Map String String
 
 data ResponseBody = ResponseBody
                     {
-                      _resBody :: String
-                    , _resBase64Encoded :: Bool
+                      body :: String
+                    , base64Encoded :: Bool
                     } deriving Show
 
-instance FromJSON ResponseBody where
-  parseJSON = withObject "response" $ \o -> ResponseBody
-                                           <$> o .: "body"
-                                           <*> o .: "base64Encoded"
+$(deriveJSON defaultOptions{ omitNothingFields = True } ''ResponseBody)
 
 newtype CanClear = CanClear Bool
                    deriving Show
@@ -49,17 +47,11 @@ instance FromJSON CanClear where
 
 data NetworkConditionsParams = NetworkConditionsParams
                                {
-                                 _netOffline :: Bool
-                               , _netLatency :: Int
-                               , _netDownloadThroughput :: Int
-                               , _netUploadThroughput :: Int
-                               , _netConnectionType :: Maybe String
+                                 offline :: Bool
+                               , latency :: Int
+                               , downloadThroughput :: Int
+                               , uploadThroughput :: Int
+                               , connectionType :: Maybe String
                                } deriving Show
 
-instance ToJSON NetworkConditionsParams where
-  toJSON (NetworkConditionsParams offline latency dl ul connType) = object [ "offline" .= offline
-                                                                           , "latency" .= latency
-                                                                           , "downloadThroughput" .= dl
-                                                                           , "uploadThroughput" .= ul
-                                                                           , "connectionType" .= connType
-                                                                           ]
+$(deriveJSON defaultOptions{ omitNothingFields = True } ''NetworkConditionsParams)

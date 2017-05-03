@@ -1,30 +1,27 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE DuplicateRecordFields #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 module Chrome.API.Page.Types where
 
 import Data.Aeson
+import Data.Aeson.TH
 
 data PageReloadParams = PageReloadParams
                         {
-                          _pIgnoreCache :: Bool
-                        , _pScriptToEvaluateOnLoad :: Maybe String
+                          ignoreCache :: Bool
+                        , scriptToEvaluateOnLoad :: Maybe String
                         } deriving Show
 
-instance ToJSON PageReloadParams where
-  toJSON (PageReloadParams ignoreCache script) = object [ "ignoreCache" .= ignoreCache
-                                                        , "scriptToEvaluateOnLoad" .= script
-                                                        ]
+$(deriveJSON defaultOptions{ omitNothingFields = True } ''PageReloadParams)
 
 data PageHandleDialogParams = PageHandleDialogParams
                               {
-                                _pAccept :: Bool
-                              , _pPromptText :: Maybe String
+                                accept :: Bool
+                              , promptText :: Maybe String
                               } deriving Show
 
-instance ToJSON PageHandleDialogParams where
-  toJSON (PageHandleDialogParams accept promptText) = object [ "accept" .= accept
-                                                             , "promptText" .= promptText
-                                                             ]
+$(deriveJSON defaultOptions{ omitNothingFields = True } ''PageHandleDialogParams)
 
 newtype FrameId = FrameId String
                   deriving Show
@@ -34,16 +31,12 @@ instance FromJSON FrameId where
 
 data CaptureScreenshotParams = CaptureScreenshotParams
                                 {
-                                  _pScreenshotFormat :: String
-                                , _pScreenshotQuality :: Int
-                                , _pScreenshotFromSurface :: Bool
+                                  format :: String
+                                , quality :: Int
+                                , fromSurface :: Bool
                                 } deriving Show
 
-instance ToJSON CaptureScreenshotParams where
-    toJSON (CaptureScreenshotParams format quality fromSurface) = object [ "format" .= format
-                                                                         , "quality" .= quality
-                                                                         , "fromSurface" .= fromSurface
-                                                                         ]
+$(deriveJSON defaultOptions{ omitNothingFields = True } ''CaptureScreenshotParams)
 
 data CaptureScreenshotResult = CaptureScreenshotResult
                                 {
@@ -61,41 +54,30 @@ instance FromJSON TimestampEvent where
 
 data FrameAttachedEvent = FrameAttachedEvent
                           {
-                            _eventFrameId :: String
-                          , _eventParentFrameId :: String
+                            frameId :: String
+                          , parentFrameId :: String
                           } deriving Show
 
-instance FromJSON FrameAttachedEvent where
-  parseJSON = withObject "params" $ \o -> FrameAttachedEvent
-                                          <$> o .: "frameId"
-                                          <*> o .: "parentFrameId"
+$(deriveJSON defaultOptions{ omitNothingFields = True } ''FrameAttachedEvent)
 
 data Frame = Frame
              {
-               _frameId :: String
-             , _frameParentId :: Maybe String
-             , _frameLoaderId :: String
-             , _frameName :: Maybe String
-             , _frameUrl :: String
-             , _frameSecurityOrigin :: String
-             , _frameMimeType :: String
+               id :: String
+             , parentId :: Maybe String
+             , loadedId :: String
+             , name :: Maybe String
+             , url :: String
+             , securityOrigin :: String
+             , mimeType :: String
              } deriving Show
 
-instance FromJSON Frame where
-  parseJSON = withObject "frame" $ \o -> Frame
-                                         <$> o .: "id"
-                                         <*> o .:? "parentId"
-                                         <*> o .: "loaderId"
-                                         <*> o .:? "name"
-                                         <*> o .: "url"
-                                         <*> o .: "securityOrigin"
-                                         <*> o .: "mimeType"
+$(deriveJSON defaultOptions{ omitNothingFields = True } ''Frame)
 
 type DialogType = String
 
 data DialogOpeningEvent = DialogOpeningEvent
                           {
-                            _dialogText :: String
+                            _dialogMessage :: String
                           , _dialogType :: DialogType
                           } deriving Show
 
@@ -112,16 +94,10 @@ instance FromJSON DialogClosingEvent where
 
 data NavigationRequestEvent = NavigationRequestEvent
                               {
-                                _navIsInMainFrame :: Bool
-                              , _navIsRedirect :: Bool
-                              , _navNavigationId :: Int
-                              , _navUrl :: String
+                                isInMainFrame :: Bool
+                              , isRedirect :: Bool
+                              , navigationId :: Int
+                              , url :: String
                               } deriving Show
 
-instance FromJSON NavigationRequestEvent where
-  parseJSON = withObject "navigation" $ \o -> NavigationRequestEvent
-                                              <$> o .: "isInMainFrame"
-                                              <*> o .: "isRedirect"
-                                              <*> o .: "navigationId"
-                                              <*> o .: "url"
-
+$(deriveJSON defaultOptions{ omitNothingFields = True } ''NavigationRequestEvent)

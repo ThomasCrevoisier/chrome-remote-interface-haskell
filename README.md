@@ -16,7 +16,11 @@ Publication on Hackage is coming soon.
 
 ## Usage
 
-Before running it, launch Chrome with the remote debugging enabled.
+Before running it, launch Chrome with the remote debugging enabled : `chrome --remote-debugging-port=9222`
+
+Notes :
+- if this doesn't work, try with Chrome Canary
+- this absolutely works with running Chrome in headless mode :)
 
 Here is an example of how to use the library :
 
@@ -52,7 +56,7 @@ sampleCommands = do
 
 main :: IO ()
 main = do
-  pages <- fetchTargets
+  pages <- fetchTargets "http://localhost:9222"
   let firstPage = head' =<< pages
   case firstPage of
     Nothing -> putStrLn "No page found"

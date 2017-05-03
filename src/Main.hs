@@ -26,7 +26,7 @@ sampleCommands = do
   listener <- onEvent Network.onRequestWillBeSent (liftIO . printRequest)
 
   waitFor $ Page.navigate "http://gitlab.com"
-  waitFor $ Page.onLoadEventFired
+  waitFor Page.onLoadEventFired
 
   stopEventListener listener
 
@@ -38,7 +38,7 @@ sampleCommands = do
 
 main :: IO ()
 main = do
-  pages <- fetchTargets
+  pages <- fetchTargets "http://localhost:9222"
   let firstPage = head' =<< pages
   case firstPage of
     Nothing -> putStrLn "No page found"

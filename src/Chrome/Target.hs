@@ -6,7 +6,7 @@ module Chrome.Target where
 import Data.Aeson
 import Data.Maybe
 
-import Network.HTTP.Client (newManager, httpLbs, defaultManagerSettings, responseBody)
+import Network.HTTP.Client (parseRequest, newManager, httpLbs, defaultManagerSettings, responseBody)
 import Network.URL
 
 import Chrome.Target.DebuggingURL
@@ -22,11 +22,11 @@ instance FromJSON Target where
                 <*> o .: "title"
                 <*> o .: "webSocketDebuggerUrl"
 
-fetchTargets :: IO (Maybe [Target])
-fetchTargets = do
+fetchTargets :: String -> IO (Maybe [Target])
+fetchTargets url = do
+  req <- parseRequest $ url ++ "/json"
   manager <- newManager defaultManagerSettings
-  -- TODO : allow to pass the address of Chrome as a param
-  res <- httpLbs "http://localhost:9222/json" manager
+  res <- httpLbs req manager
   return . decode . responseBody $ res
 
 type WSTargetSettings = (String, Integer, String)

@@ -48,3 +48,18 @@ setCacheDisabled disabled = callMethod $ Method "Network.setCacheDisabled" (inse
 
 onRequestWillBeSent :: TargetClientAsync (MethodResult RequestEvent)
 onRequestWillBeSent = listenToEventMethod "Network.requestWillBeSent"
+
+onRequestServedFromCache :: TargetClientAsync (MethodResult RequestFromCacheEvent)
+onRequestServedFromCache = listenToEventMethod "Network.requestServedFromCache"
+
+onResponseReceived :: TargetClientAsync (MethodResult ResponseReceivedEvent)
+onResponseReceived = listenToEventMethod "Network.responseReceived"
+
+onDataReceived :: TargetClientAsync (MethodResult DataReceivedEvent)
+onDataReceived = listenToEventMethod "Network.dataReceived"
+
+onLoadingFinished :: TargetClientAsync (MethodResult LoadingFinishedEvent)
+onLoadingFinished = listenToEventMethod "Network.loadingFinished"
+
+onLoadingFailed :: TargetClientAsync (MethodResult LoadingFailedEvent)
+onLoadingFailed = listenToEventMethod "Network.loadingFailed"

@@ -100,3 +100,44 @@ data RequestEvent = RequestEvent
                     deriving Show
 
 $(deriveFromJSON defaultOptions{ omitNothingFields = True } ''RequestEvent)
+
+data RequestFromCacheEvent = RequestFromCacheEvent { requestId :: String }
+                             deriving Show
+
+$(deriveJSON defaultOptions{ omitNothingFields = True } ''RequestFromCacheEvent)
+
+data ResponseReceivedEvent = ResponseReceivedEvent
+                             { requestId :: String
+                             , frameId :: String
+                             , loaderId :: String
+                             , timestamp :: Double
+                             , response :: Response
+                             } deriving Show
+
+$(deriveFromJSON defaultOptions{ omitNothingFields = True} ''ResponseReceivedEvent)
+
+data DataReceivedEvent = DataReceivedEvent
+                         { requestId :: String
+                         , timestamp :: Double
+                         , dataLength :: Int
+                         , encodedDataLength :: Int
+                         } deriving Show
+
+$(deriveFromJSON defaultOptions{ omitNothingFields = True} ''DataReceivedEvent)
+
+data LoadingFinishedEvent = LoadingFinishedEvent
+                            { requestId :: String
+                            , timestamp :: Double
+                            , encodedDataLength :: Int
+                            } deriving Show
+
+$(deriveFromJSON defaultOptions{ omitNothingFields = True} ''LoadingFinishedEvent)
+
+data LoadingFailedEvent = LoadingFailedEvent
+                          { requestId :: String
+                          , timestamp :: Double
+                          , errorText :: String
+                          , canceled :: Maybe Bool
+                          } deriving Show
+
+$(deriveFromJSON defaultOptions{ omitNothingFields = True } ''LoadingFailedEvent)

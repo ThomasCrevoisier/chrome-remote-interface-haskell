@@ -16,17 +16,44 @@ import Chrome.Target.Client (callMethod, TargetClientAsync)
 
 import Chrome.API.DOM.Types
 
-enable :: TargetClientAsync (MethodResult ())
+enable :: TargetClientAsync (MethodResult AnyResult)
 enable = callMethod $ Method "DOM.enable" noParam
 
-disable :: TargetClientAsync (MethodResult ())
+disable :: TargetClientAsync (MethodResult AnyResult)
 disable = callMethod $ Method "DOM.disable" noParam
 
 getDocument :: TargetClientAsync (MethodResult GetDocumentResponse)
 getDocument = callMethod $ Method "DOM.getDocument" noParam
+
+requestChildNodes :: RequestChildNodesParams -> TargetClientAsync (MethodResult AnyResult)
+requestChildNodes = callMethod . Method "DOM.requestChildNodes"
 
 querySelector :: QuerySelectorParam -> TargetClientAsync (MethodResult QuerySelectorResponse)
 querySelector = callMethod . Method "DOM.querySelector"
 
 querySelectorAll :: QuerySelectorParam -> TargetClientAsync (MethodResult QuerySelectorAllResponse)
 querySelectorAll = callMethod . Method "DOM.querySelectorAll"
+
+setNodeName :: NodeNameParams -> TargetClientAsync (MethodResult NodeNameResult)
+setNodeName = callMethod . Method "DOM.setNodeName"
+
+setNodeValue :: NodeValueParams -> TargetClientAsync (MethodResult AnyResult)
+setNodeValue = callMethod . Method "DOM.setNodeValue"
+
+removeNode :: RemoveNodeParams -> TargetClientAsync (MethodResult AnyResult)
+removeNode = callMethod . Method "DOM.removeNode"
+
+setAttributeValue :: SetAttributeParams -> TargetClientAsync (MethodResult AnyResult)
+setAttributeValue = callMethod . Method "DOM.setAttributeValue"
+
+setAttributesAsText :: SetAttributesAsTextParams -> TargetClientAsync (MethodResult AnyResult)
+setAttributesAsText = callMethod . Method "DOM.setAttributesAsText"
+
+removeAttribute :: RemoveAttributeParams -> TargetClientAsync (MethodResult AnyResult)
+removeAttribute = callMethod . Method "DOM.removeAttribute"
+
+getOuterHTML :: NodeIdParam -> TargetClientAsync (MethodResult OuterHTML)
+getOuterHTML = callMethod . Method "DOM.getOuterHTML"
+
+setOuterHTML :: SetOuterHTMLParams -> TargetClientAsync (MethodResult AnyResult)
+setOuterHTML = callMethod . Method "DOM.setOuterHTML"

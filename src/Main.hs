@@ -33,8 +33,8 @@ sampleCommands = do
   traverse_ waitFor [Page.disable, Network.disable]
 
   where
-    printRequest (Right (Network.RequestEvent (Network.Request url))) = print url
-    printRequest _ = putStrLn "Oopsy"
+    printRequest (Right event) = print event
+    printRequest (Left err) = print err
 
 main :: IO ()
 main = do

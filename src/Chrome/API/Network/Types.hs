@@ -19,16 +19,6 @@ $(deriveJSON defaultOptions{ omitNothingFields = True } ''NetworkEnableParams)
 
 defaultEnableParams = NetworkEnableParams Nothing Nothing
 
-data Request = Request { url :: String }
-               deriving Show
-
-$(deriveJSON defaultOptions{ omitNothingFields = True } ''Request)
-
-data RequestEvent = RequestEvent { request :: Request }
-                    deriving Show
-
-$(deriveJSON defaultOptions{ omitNothingFields = True } ''RequestEvent)
-
 type Headers = Map String String
 
 data ResponseBody = ResponseBody
@@ -55,3 +45,58 @@ data NetworkConditionsParams = NetworkConditionsParams
                                } deriving Show
 
 $(deriveJSON defaultOptions{ omitNothingFields = True } ''NetworkConditionsParams)
+
+data Initiator = Initiator
+                 {
+                   _type :: String
+                 , url :: Maybe String
+                 , lineNumber :: Maybe Int
+                 } deriving Show
+
+instance FromJSON Initiator where
+  parseJSON = withObject "initiator" $ \o -> Initiator
+                                             <$> o .: "type"
+                                             <*> o .:? "url"
+                                             <*> o .:? "lineNumber"
+
+data Request = Request { url :: String }
+               deriving Show
+
+$(deriveJSON defaultOptions{ omitNothingFields = True } ''Request)
+
+data Response = Response
+                {
+                  url :: String
+                , status :: Int
+                , statusText :: String
+                , headers :: Headers
+                , headersText :: Maybe String
+                , mimeType :: String
+                , requestHeaders :: Maybe Headers
+                , requestHeadersText :: Maybe String
+                , connectionReused :: Bool
+                , connectionId :: Int
+                , remoteIPAddress :: Maybe String
+                , remotePort :: Maybe Int
+                , fromDiskCache :: Maybe Bool
+                , fromServiceWorker :: Maybe Bool
+                , encodedDataLength :: Int
+                , protocol :: Maybe String
+                } deriving Show
+
+$(deriveFromJSON defaultOptions{ omitNothingFields = True } ''Response)
+
+data RequestEvent = RequestEvent
+                    { requestId :: String
+                    , frameId :: String
+                    , loaderId :: String
+                    , documentURL :: String
+                    , request :: Request
+                    , timestamp :: Double
+                    , wallTime :: Double
+                    , initiator :: Initiator
+                    , redirectResponse :: Maybe Response
+                    }
+                    deriving Show
+
+$(deriveFromJSON defaultOptions{ omitNothingFields = True } ''RequestEvent)

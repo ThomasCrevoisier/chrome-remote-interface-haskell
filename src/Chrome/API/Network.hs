@@ -28,9 +28,6 @@ setExtraHTTPHeaders = callMethod . Method "Network.setExtraHTTPHeaders"
 getResponseBody :: String -> TargetClientAsync (MethodResult ResponseBody)
 getResponseBody requestId = callMethod $ Method "Network.getResponseBody" (insert "requestId" requestId empty)
 
-onRequestWillBeSent :: TargetClientAsync (MethodResult RequestEvent)
-onRequestWillBeSent = listenToEventMethod "Network.requestWillBeSent"
-
 canClearBrowserCache :: TargetClientAsync (MethodResult CanClear)
 canClearBrowserCache = callMethod $ Method "Network.canClearBrowserCache" noParam
 
@@ -48,3 +45,6 @@ emulateNetworkConditions = callMethod . Method "Network.emulateNetworkConditions
 
 setCacheDisabled :: Bool -> TargetClientAsync (MethodResult AnyResult)
 setCacheDisabled disabled = callMethod $ Method "Network.setCacheDisabled" (insert "cacheDisabled"disabled empty)
+
+onRequestWillBeSent :: TargetClientAsync (MethodResult RequestEvent)
+onRequestWillBeSent = listenToEventMethod "Network.requestWillBeSent"

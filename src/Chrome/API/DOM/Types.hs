@@ -172,3 +172,49 @@ data HighlightNodeParams = HighlightNodeParams
                            } deriving Show
 
 $(deriveJSON defaultOptions{ omitNothingFields = True } ''HighlightNodeParams)
+
+data ResolveNodeParams = ResolveNodeParams
+                         { nodeId :: Int
+                         , objectGroup :: Maybe String
+                         } deriving Show
+
+$(deriveJSON defaultOptions{ omitNothingFields = True } ''ResolveNodeParams)
+
+data RemoteObject = RemoteObject
+                    { _type :: String
+                    , subtype :: String
+                    , className :: Maybe String
+                    , value :: Maybe Value
+                    , unserializableValue :: Maybe String
+                    , description :: Maybe String
+                    , objectId :: Maybe String
+                    } deriving Show
+
+
+$(deriveJSON defaultOptions{
+     omitNothingFields = True
+   , fieldLabelModifier = let f "type" = "_type"
+                              f str = str
+                              in
+                            f
+} ''RemoteObject)
+
+data ResolveNodeResult = ResolveNodeResult
+                         { object :: RemoteObject }
+                         deriving Show
+
+$(deriveJSON defaultOptions{ omitNothingFields = True } ''ResolveNodeResult)
+
+data AttributesResult = AttributesResult
+                        { attributes :: [String] }
+                        deriving Show
+
+$(deriveJSON defaultOptions ''AttributesResult)
+
+data MoveToParams = MoveToParams
+                    { nodeId :: Int
+                    , targetNodeId :: Int
+                    , insertBeforeNodeId :: Maybe Int
+                    } deriving Show
+
+$(deriveJSON defaultOptions{ omitNothingFields = True } ''MoveToParams)

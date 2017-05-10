@@ -69,3 +69,12 @@ highlightNode = callMethod . Method "DOM.highlightNode"
 
 hideHighlight :: TargetClientAsync (MethodResult AnyResult)
 hideHighlight = callMethod $ Method "DOM.hideHighlight" noParam
+
+resolveNode :: ResolveNodeParams -> TargetClientAsync (MethodResult ResolveNodeResult)
+resolveNode = callMethod . Method "DOM.resolveNode"
+
+getAttributes :: NodeIdParam -> TargetClientAsync (MethodResult AttributesResult)
+getAttributes = callMethod . Method "DOM.getAttributes"
+
+moveTo :: MoveToParams -> TargetClientAsync (MethodResult NodeIdResult)
+moveTo = callMethod . Method "DOM.moveTo"

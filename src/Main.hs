@@ -14,6 +14,7 @@ import Chrome.Target.Async (waitFor, onEvent, stopEventListener)
 import qualified Chrome.API.Page as Page
 import qualified Chrome.API.DOM as DOM
 import qualified Chrome.API.Network as Network
+import qualified Chrome.API.DOMDebugger as DOMDebugger
 
 head' :: [a] -> Maybe a
 head' (x:_) = Just x

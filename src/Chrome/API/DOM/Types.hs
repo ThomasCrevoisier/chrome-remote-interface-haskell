@@ -218,3 +218,54 @@ data MoveToParams = MoveToParams
                     } deriving Show
 
 $(deriveJSON defaultOptions{ omitNothingFields = True } ''MoveToParams)
+
+data SetChildNodesEvent = SetChildNodesEvent
+                          { parentId :: Int
+                          , nodes :: [Node]
+                          } deriving Show
+
+$(deriveJSON defaultOptions ''SetChildNodesEvent)
+
+data AttributeModifiedEvent = AttributeModifiedEvent
+                              { nodeId :: Int
+                              , name :: String
+                              , value :: String
+                              } deriving Show
+
+$(deriveJSON defaultOptions ''AttributeModifiedEvent)
+
+data AttributeRemovedEvent = AttributeRemovedEvent
+                             { nodeId :: Int
+                             , name :: String
+                             } deriving Show
+
+$(deriveJSON defaultOptions ''AttributeRemovedEvent)
+
+data CharDataModifiedEvent = CharDataModifiedEvent
+                             { nodeId :: Int
+                             , characterData :: String
+                             } deriving Show
+
+$(deriveJSON defaultOptions ''CharDataModifiedEvent)
+
+data ChildNodeCountEvent = ChildNodeCountEvent
+                           { nodeId :: Int
+                           , childNodeCount :: Int
+                           } deriving Show
+
+$(deriveJSON defaultOptions ''ChildNodeCountEvent)
+
+data ChildNodeInsertedEvent = ChildNodeInsertedEvent
+                              { parentNodeId :: Int
+                              , previousNodeId :: Int
+                              , node :: Node
+                              } deriving Show
+
+$(deriveJSON defaultOptions ''ChildNodeInsertedEvent)
+
+data ChildNodeRemovedEvent = ChildNodeRemovedEvent
+                             { parentNodeId :: Int
+                             , nodeId :: Int
+                             } deriving Show
+
+$(deriveJSON defaultOptions ''ChildNodeRemovedEvent)

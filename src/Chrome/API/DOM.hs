@@ -1,18 +1,12 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Chrome.API.DOM (
     module Chrome.API.DOM.Types
-  , enable
-  , disable
-  , getDocument
-  , querySelector
-  , querySelectorAll
+  , module Chrome.API.DOM
   ) where
 
 import Data.Aeson
 
 import Chrome.Target.Message
-import Chrome.Target.Client (callMethod, TargetClientAsync)
+import Chrome.Target.Client (callMethod, TargetClientAsync, listenToEventMethod)
 
 import Chrome.API.DOM.Types
 
@@ -78,3 +72,27 @@ getAttributes = callMethod . Method "DOM.getAttributes"
 
 moveTo :: MoveToParams -> TargetClientAsync (MethodResult NodeIdResult)
 moveTo = callMethod . Method "DOM.moveTo"
+
+onDocumentUpdated :: TargetClientAsync (MethodResult AnyResult)
+onDocumentUpdated = listenToEventMethod "DOM.documentUpdated"
+
+onSetChildNodes :: TargetClientAsync (MethodResult SetChildNodesEvent)
+onSetChildNodes = listenToEventMethod "DOM.setChildNodes"
+
+onAttributeModified :: TargetClientAsync (MethodResult AttributeModifiedEvent)
+onAttributeModified = listenToEventMethod "DOM.attributeModified"
+
+onAttributeRemoved :: TargetClientAsync (MethodResult AttributeRemovedEvent)
+onAttributeRemoved = listenToEventMethod "DOM.attributeRemoved"
+
+onCharacterDataModified :: TargetClientAsync (MethodResult CharDataModifiedEvent)
+onCharacterDataModified = listenToEventMethod "DOM.characterDataModified"
+
+onChildNodeCountUpdated :: TargetClientAsync (MethodResult ChildNodeCountEvent)
+onChildNodeCountUpdated = listenToEventMethod "DOM.childNodeCountUpdated"
+
+onChildNodeInserted :: TargetClientAsync (MethodResult ChildNodeInsertedEvent)
+onChildNodeInserted = listenToEventMethod "DOM.childNodeInserted"
+
+onChildNodeRemoved :: TargetClientAsync (MethodResult ChildNodeRemovedEvent)
+onChildNodeRemoved = listenToEventMethod "DOM.childNodeRemoved"

@@ -57,3 +57,15 @@ getOuterHTML = callMethod . Method "DOM.getOuterHTML"
 
 setOuterHTML :: SetOuterHTMLParams -> TargetClientAsync (MethodResult AnyResult)
 setOuterHTML = callMethod . Method "DOM.setOuterHTML"
+
+requestNode :: RequestNodeParams -> TargetClientAsync (MethodResult NodeIdResult)
+requestNode = callMethod . Method "DOM.requestNode"
+
+highlightRect :: HighlightRectParams -> TargetClientAsync (MethodResult AnyResult)
+highlightRect = callMethod . Method "DOM.highlightRect"
+
+highlightNode :: HighlightNodeParams -> TargetClientAsync (MethodResult AnyResult)
+highlightNode = callMethod . Method "DOM.highlightNode"
+
+hideHighlight :: TargetClientAsync (MethodResult AnyResult)
+hideHighlight = callMethod $ Method "DOM.hideHighlight" noParam

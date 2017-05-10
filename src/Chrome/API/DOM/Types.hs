@@ -114,3 +114,61 @@ data SetOuterHTMLParams = SetOuterHTMLParams
                           } deriving Show
 
 $(deriveJSON defaultOptions{ omitNothingFields = True } ''SetOuterHTMLParams)
+
+data RequestNodeParams = RequestNodeParams
+                         { objectId :: String }
+                         deriving Show
+
+$(deriveJSON defaultOptions ''RequestNodeParams)
+
+data NodeIdResult = NodeIdResult
+                    { nodeId :: Int }
+                    deriving Show
+
+$(deriveJSON defaultOptions ''NodeIdResult)
+
+data RGBA = RGBA
+            { r :: Int
+            , g :: Int
+            , b :: Int
+            , a :: Maybe Int
+            } deriving Show
+
+$(deriveJSON defaultOptions{ omitNothingFields = True } ''RGBA)
+
+data HighlightRectParams = HighlightRectParams
+                            { x :: Int
+                            , y :: Int
+                            , width :: Int
+                            , height :: Int
+                            , color :: Maybe RGBA
+                            , outlineColor :: Maybe RGBA
+                            } deriving Show
+
+$(deriveJSON defaultOptions{ omitNothingFields = True } ''HighlightRectParams)
+
+data HighlightConfig = HighlightConfig
+                       { showInfo :: Maybe Bool
+                       , showRulers :: Maybe Bool
+                       , showExtensionLines :: Maybe Bool
+                       , displayAsMaterial :: Maybe Bool
+                       , contentColor :: Maybe RGBA
+                       , paddingColor :: Maybe RGBA
+                       , borderColor :: Maybe RGBA
+                       , marginColor :: Maybe RGBA
+                       , eventTargetColor :: Maybe RGBA
+                       , shapeColor :: Maybe RGBA
+                       , shapeMarginColor :: Maybe RGBA
+                       , selectorList :: Maybe String
+                       } deriving Show
+
+$(deriveJSON defaultOptions{ omitNothingFields = True } ''HighlightConfig)
+
+data HighlightNodeParams = HighlightNodeParams
+                           { highlightConfig :: HighlightConfig
+                           , nodeId :: Maybe Int
+                           , backendNodeId :: Maybe Int
+                           , objectId :: Maybe String
+                           } deriving Show
+
+$(deriveJSON defaultOptions{ omitNothingFields = True } ''HighlightNodeParams)

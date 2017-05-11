@@ -8,7 +8,7 @@ import Data.Aeson
 import Data.Aeson.TH
 
 import Chrome.Target.Message.TH (deriveJSONMsg)
-import Chrome.API.Runtime.Types (RemoteObject, ExceptionDetails, CallArgument, ExecutionContextId, ScriptId, StackTrace, CallFrame)
+import Chrome.API.Runtime.Types (RemoteObject, ExceptionDetails, CallArgument, ExecutionContextId, ScriptId, StackTrace)
 
 data BreakpointActiveParam = BreakpointActiveParam
                              { active :: Bool }
@@ -180,7 +180,33 @@ data BreakpointResolvedEvent = BreakpointResolvedEvent
 
 $(deriveJSONMsg ''BreakpointResolvedEvent)
 
+data Scope = Scope
+             { _type :: String
+             , object :: RemoteObject
+             , name :: Maybe String
+             , startLocation :: Maybe Location
+             , endLocation :: Maybe Location
+             } deriving Show
+
+$(deriveJSONMsg ''Scope)
+
+type CallFrameId = String
+
+data CallFrame = CallFrame
+                 { callFrameId :: CallFrameId
+                 , functionName :: String
+                 , functionLocation :: Maybe Location
+                 , location :: Location
+                 , scopeChain :: [Scope]
+                 , this :: RemoteObject
+                 , returnValue :: Maybe RemoteObject
+                 } deriving Show
+
+$(deriveJSONMsg ''CallFrame)
+
 data PauseEvent = PauseEvent
+                  -- NOTE : this CallFrame is not similar to Runtime.CallFrame...
+                  -- TODO : Implement the data type Debugger.CallFrame
                   { callFrames :: [CallFrame]
                   , reason :: String
                   , _data :: Maybe Value

@@ -196,3 +196,55 @@ data RunScriptParams = RunScriptParams
                        } deriving Show
 
 $(deriveJSONMsg ''RunScriptParams)
+
+data ExecutionContextDescription = ExecutionContextDescription
+                                   { id :: ExecutionContextId
+                                   , origin :: String
+                                   , name :: String
+                                   , auxData :: Maybe Value
+                                   } deriving Show
+
+$(deriveJSONMsg ''ExecutionContextDescription)
+
+data ContextCreatedEvent = ContextCreatedEvent
+                           { context :: ExecutionContextDescription }
+                           deriving Show
+
+$(deriveJSONMsg ''ContextCreatedEvent)
+
+data ContextDestroyedEvent = ContextDestroyedEvent
+                           { executionContextId :: ExecutionContextId }
+                           deriving Show
+
+$(deriveJSONMsg ''ContextDestroyedEvent)
+
+data ExceptionThrownEvent = ExceptionThrownEvent
+                            { timestamp :: Double
+                            , exceptionDetails :: ExceptionDetails
+                            } deriving Show
+
+$(deriveJSONMsg ''ExceptionThrownEvent)
+
+data ExceptionRevokedEvent = ExceptionRevokedEvent
+                            { reason :: String
+                            , exceptionId :: Int
+                            } deriving Show
+
+$(deriveJSONMsg ''ExceptionRevokedEvent)
+
+data ConsoleAPICalledEvent = ConsoleAPICalledEvent
+                             { _type :: String
+                             , args :: [RemoteObject]
+                             , executionContextId :: ExecutionContextId
+                             , timestamp :: Double
+                             , stackTrace :: Maybe StackTrace
+                             } deriving Show
+
+$(deriveJSONMsg ''ConsoleAPICalledEvent)
+
+data InspectRequestedEvent = InspectRequestedEvent
+                             { object :: RemoteObject
+                             , hints :: Value
+                             } deriving Show
+
+$(deriveJSONMsg ''InspectRequestedEvent)

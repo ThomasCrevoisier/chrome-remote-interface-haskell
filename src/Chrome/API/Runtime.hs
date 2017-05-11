@@ -40,3 +40,24 @@ compileScript = callMethod . Method "Runtime.compileScript"
 
 runScript :: RunScriptParams -> TargetClientAsync (MethodResult EvaluateResult)
 runScript = callMethod . Method "Runtime.runScript"
+
+onExecutionContextCreated :: TargetClientAsync (MethodResult ContextCreatedEvent)
+onExecutionContextCreated = listenToEventMethod "Runtime.executionContextCreated"
+
+onExecutionContextDestroyed :: TargetClientAsync (MethodResult ContextDestroyedEvent)
+onExecutionContextDestroyed = listenToEventMethod "Runtime.executionContextDestroyed"
+
+onExecutionContextsCleared :: TargetClientAsync (MethodResult AnyResult)
+onExecutionContextsCleared = listenToEventMethod "Runtime.executionContextsCleared"
+
+onExceptionThrown :: TargetClientAsync (MethodResult ExceptionThrownEvent)
+onExceptionThrown = listenToEventMethod "Runtime.exceptionThrown"
+
+onExceptionRevoked :: TargetClientAsync (MethodResult ExceptionRevokedEvent)
+onExceptionRevoked = listenToEventMethod "Runtime.exceptionRevoked"
+
+onConsoleAPICalled :: TargetClientAsync (MethodResult ConsoleAPICalledEvent)
+onConsoleAPICalled = listenToEventMethod "Runtime.consoleAPICalled"
+
+onInspectRequested :: TargetClientAsync (MethodResult InspectRequestedEvent)
+onInspectRequested = listenToEventMethod "Runtime.inspectRequested"

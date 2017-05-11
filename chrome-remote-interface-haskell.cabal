@@ -20,6 +20,7 @@ executable chrome-remote-interface-haskell
                      , Chrome.Target.DebuggingURL
                      , Chrome.Target.Client
                      , Chrome.Target.Message
+                     , Chrome.Target.Message.TH
                      , Chrome.Target.Async
                      , Chrome.API.Page
                      , Chrome.API.Page.Types

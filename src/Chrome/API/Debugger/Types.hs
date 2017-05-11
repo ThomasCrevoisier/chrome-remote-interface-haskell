@@ -7,19 +7,20 @@ module Chrome.API.Debugger.Types where
 import Data.Aeson
 import Data.Aeson.TH
 
+import Chrome.Target.Message.TH (deriveJSONMsg, escapeKeywords)
 import Chrome.API.Runtime.Types (RemoteObject, ExceptionDetails, CallArgument)
 
 data BreakpointActiveParam = BreakpointActiveParam
                              { active :: Bool }
                              deriving Show
 
-$(deriveJSON defaultOptions ''BreakpointActiveParam)
+$(deriveJSONMsg ''BreakpointActiveParam)
 
 data SkipAllPausesParam = SkipAllPausesParam
                           { skip :: Bool }
                           deriving Show
 
-$(deriveJSON defaultOptions ''SkipAllPausesParam)
+$(deriveJSONMsg ''SkipAllPausesParam)
 
 data BreakpointByURLParams = BreakpointByURLParams
                              { lineNumber :: Int
@@ -29,7 +30,7 @@ data BreakpointByURLParams = BreakpointByURLParams
                              , condition :: Maybe String
                              } deriving Show
 
-$(deriveJSON defaultOptions{ omitNothingFields = True } ''BreakpointByURLParams)
+$(deriveJSONMsg ''BreakpointByURLParams)
 
 data Location = Location
                 { scriptId :: String
@@ -37,40 +38,40 @@ data Location = Location
                 , columnNumber :: Maybe Int
                 } deriving Show
 
-$(deriveJSON defaultOptions{ omitNothingFields = True } ''Location)
+$(deriveJSONMsg ''Location)
 
 data BreakpointByURLResult = BreakpointByURLResult
                              { breakpointId :: String
                              , locations :: [Location]
                              } deriving Show
 
-$(deriveJSON defaultOptions ''BreakpointByURLResult)
+$(deriveJSONMsg ''BreakpointByURLResult)
 
 data SetBreakpointParams = SetBreakpointParams
                            { location :: Location
                            , condition :: Maybe String
                            } deriving Show
 
-$(deriveJSON defaultOptions{ omitNothingFields = True } ''SetBreakpointParams)
+$(deriveJSONMsg ''SetBreakpointParams)
 
 data SetBreakpointResult = SetBreakpointResult
                            { breakpointId :: String
                            , actualLocation :: Location
                            } deriving Show
 
-$(deriveJSON defaultOptions ''SetBreakpointResult)
+$(deriveJSONMsg ''SetBreakpointResult)
 
 data RemoveBreakpointParams = RemoveBreakpointParams
                               { breakpointId :: String }
                               deriving Show
 
-$(deriveJSON defaultOptions ''RemoveBreakpointParams)
+$(deriveJSONMsg ''RemoveBreakpointParams)
 
 data ContinueToLocationParams = ContinueToLocationParams
                                 { location :: Location }
                                 deriving Show
 
-$(deriveJSON defaultOptions ''ContinueToLocationParams)
+$(deriveJSONMsg ''ContinueToLocationParams)
 
 data SetScriptSourceParams = SetScriptSourceParams
                              { scriptId :: String
@@ -78,31 +79,31 @@ data SetScriptSourceParams = SetScriptSourceParams
                              , dryRun :: Maybe Bool
                              } deriving Show
 
-$(deriveJSON defaultOptions{ omitNothingFields = True } ''SetScriptSourceParams)
+$(deriveJSONMsg ''SetScriptSourceParams)
 
 data RestartFrameParams = RestartFrameParams
                           { callFrameId :: String }
                           deriving Show
 
-$(deriveJSON defaultOptions ''RestartFrameParams)
+$(deriveJSONMsg ''RestartFrameParams)
 
 data GetScriptSourceParams = GetScriptSourceParams
                              { scriptId :: String }
                              deriving Show
 
-$(deriveJSON defaultOptions ''GetScriptSourceParams)
+$(deriveJSONMsg ''GetScriptSourceParams)
 
 data GetScriptSourceResult = GetScriptSourceResult
                              { scriptSource :: String }
                              deriving Show
 
-$(deriveJSON defaultOptions ''GetScriptSourceResult)
+$(deriveJSONMsg ''GetScriptSourceResult)
 
 data SetPauseOnExceptionsParams = SetPauseOnExceptionsParams
                                   { state :: String }
                                   deriving Show
 
-$(deriveJSON defaultOptions ''SetPauseOnExceptionsParams)
+$(deriveJSONMsg ''SetPauseOnExceptionsParams)
 
 data EvaluateOnCallFrameParams = EvaluateOnCallFrameParams
                                  { callFrameId :: String
@@ -114,14 +115,14 @@ data EvaluateOnCallFrameParams = EvaluateOnCallFrameParams
                                  , generatePreview :: Maybe Bool
                                  } deriving Show
 
-$(deriveJSON defaultOptions{ omitNothingFields = True } ''EvaluateOnCallFrameParams)
+$(deriveJSONMsg ''EvaluateOnCallFrameParams)
 
 data EvaluateOnCallFrameResult = EvaluateOnCallFrameResult
                                  { result :: RemoteObject
                                  , exceptionDetails :: Maybe ExceptionDetails
                                  } deriving Show
 
-$(deriveJSON defaultOptions{ omitNothingFields = True } ''EvaluateOnCallFrameResult)
+$(deriveJSONMsg ''EvaluateOnCallFrameResult)
 
 data SetVariableValueParams = SetVariableValueParams
                               { scopeNumber :: Int
@@ -130,10 +131,10 @@ data SetVariableValueParams = SetVariableValueParams
                               , callFrameId :: String
                               } deriving Show
 
-$(deriveJSON defaultOptions ''SetVariableValueParams)
+$(deriveJSONMsg ''SetVariableValueParams)
 
 data SetAsyncCallStackDepthParams = SetAsyncCallStackDepthParams
                                     { maxDepth :: Int }
                                     deriving Show
 
-$(deriveJSON defaultOptions ''SetAsyncCallStackDepthParams)
+$(deriveJSONMsg ''SetAsyncCallStackDepthParams)

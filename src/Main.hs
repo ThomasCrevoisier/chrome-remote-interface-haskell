@@ -18,6 +18,7 @@ import qualified Chrome.API.DOMDebugger as DOMDebugger
 import qualified Chrome.API.Debugger as Debugger
 import qualified Chrome.API.Emulation as Emulation
 import qualified Chrome.API.Input as Input
+import qualified Chrome.API.Profiler as Profiler
 
 head' :: [a] -> Maybe a
 head' (x:_) = Just x

@@ -20,6 +20,7 @@ import qualified Chrome.API.Emulation as Emulation
 import qualified Chrome.API.Input as Input
 import qualified Chrome.API.Profiler as Profiler
 import qualified Chrome.API.Runtime as Runtime
+import qualified Chrome.API.Schema as Schema
 
 head' :: [a] -> Maybe a
 head' (x:_) = Just x

@@ -17,5 +17,11 @@ setSamplingInterval = callMethod . Method "Profiler.setSamplingInterval"
 start :: TargetClientAsync (MethodResult AnyResult)
 start = callMethod $ Method "Profiler.start" noParam
 
-stop :: TargetClientAsync (MethodResult Profile)
+stop :: TargetClientAsync (MethodResult ProfileResult)
 stop = callMethod $ Method "Profiler.stop" noParam
+
+onConsoleProfileStarted :: TargetClientAsync (MethodResult ProfileStartedEvent)
+onConsoleProfileStarted = listenToEventMethod "Profiler.consoleProfileStarted"
+
+onConsoleProfileFinished :: TargetClientAsync (MethodResult ProfileFinishedEvent)
+onConsoleProfileFinished = listenToEventMethod "Profiler.consoleProfileFinished"

@@ -10,6 +10,7 @@ import Data.Aeson.TH
 import Chrome.Target.Message.TH (deriveJSONMsg)
 
 import Chrome.API.Runtime.Types (CallFrame)
+import Chrome.API.Debugger.Types (Location)
 
 data SamplingIntervalParam = SamplingIntervalParam
                              { interval :: Int }
@@ -42,3 +43,20 @@ data ProfileResult = ProfileResult
                deriving Show
 
 $(deriveJSONMsg ''ProfileResult)
+
+data ProfileStartedEvent = ProfileStartedEvent
+                           { id :: String
+                           , location :: Location
+                           , title :: Maybe String
+                           } deriving Show
+
+$(deriveJSONMsg ''ProfileStartedEvent)
+
+data ProfileFinishedEvent = ProfileFinishedEvent
+                            { id :: String
+                            , location :: Location
+                            , profile :: Profile
+                            , title :: Maybe String
+                            } deriving Show
+
+$(deriveJSONMsg ''ProfileFinishedEvent)

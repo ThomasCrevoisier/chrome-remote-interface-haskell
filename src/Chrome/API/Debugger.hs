@@ -66,3 +66,18 @@ setVariableValue = callMethod . Method "Debugger.setVariableValue"
 
 setAsyncCallStackDepth :: SetAsyncCallStackDepthParams -> TargetClientAsync (MethodResult AnyResult)
 setAsyncCallStackDepth = callMethod . Method "Debugger.setAsyncCallStackDepth"
+
+onScriptParsed :: TargetClientAsync (MethodResult ScriptParsedEvent)
+onScriptParsed = listenToEventMethod "Debugger.scriptParsed"
+
+onScriptFailedToParse :: TargetClientAsync (MethodResult ScriptParsedFailedEvent)
+onScriptFailedToParse = listenToEventMethod "Debugger.scriptFailedToParsed"
+
+onBreakpointResolved :: TargetClientAsync (MethodResult BreakpointResolvedEvent)
+onBreakpointResolved = listenToEventMethod "Debugger.breakpointResolved"
+
+onPaused :: TargetClientAsync (MethodResult PauseEvent)
+onPaused = listenToEventMethod "Debugger.pause"
+
+onResumed :: TargetClientAsync (MethodResult AnyResult)
+onResumed = listenToEventMethod "Debugger.resumed"

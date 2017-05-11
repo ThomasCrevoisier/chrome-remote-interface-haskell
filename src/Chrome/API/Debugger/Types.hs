@@ -7,8 +7,8 @@ module Chrome.API.Debugger.Types where
 import Data.Aeson
 import Data.Aeson.TH
 
-import Chrome.Target.Message.TH (deriveJSONMsg, escapeKeywords)
-import Chrome.API.Runtime.Types (RemoteObject, ExceptionDetails, CallArgument)
+import Chrome.Target.Message.TH (deriveJSONMsg)
+import Chrome.API.Runtime.Types (RemoteObject, ExceptionDetails, CallArgument, ExecutionContextId, ScriptId, StackTrace, CallFrame)
 
 data BreakpointActiveParam = BreakpointActiveParam
                              { active :: Bool }
@@ -138,3 +138,54 @@ data SetAsyncCallStackDepthParams = SetAsyncCallStackDepthParams
                                     deriving Show
 
 $(deriveJSONMsg ''SetAsyncCallStackDepthParams)
+
+data ScriptParsedEvent = ScriptParsedEvent
+                         { scriptId :: ScriptId
+                         , url :: String
+                         , startLine :: Int
+                         , startColumn :: Int
+                         , endLine :: Int
+                         , endColumn :: Int
+                         , executionContextId :: ExecutionContextId
+                         , hash :: String
+                         , executionContextAuxData :: Maybe Value
+                         , sourceMapURL :: Maybe String
+                         , hasSourceURL :: Maybe Bool
+                         } deriving Show
+
+$(deriveJSONMsg ''ScriptParsedEvent)
+
+data ScriptParsedFailedEvent = ScriptParsedFailedEvent
+                               { scriptId :: ScriptId
+                               , url :: String
+                               , startLine :: Int
+                               , startColumn :: Int
+                               , endLine :: Int
+                               , endColumn :: Int
+                               , executionContextId :: ExecutionContextId
+                               , hash :: String
+                               , executionContextAuxData :: Maybe Value
+                               , sourceMapURL :: Maybe String
+                               , hasSourceURL :: Maybe Bool
+                               } deriving Show
+
+$(deriveJSONMsg ''ScriptParsedFailedEvent)
+
+type BreakpointId = String
+
+data BreakpointResolvedEvent = BreakpointResolvedEvent
+                               { breakpointId :: BreakpointId
+                               , location :: Location
+                               } deriving Show
+
+$(deriveJSONMsg ''BreakpointResolvedEvent)
+
+data PauseEvent = PauseEvent
+                  { callFrames :: [CallFrame]
+                  , reason :: String
+                  , _data :: Maybe Value
+                  , hitBreakpoints :: Maybe [String]
+                  , asyncStackTrace :: Maybe StackTrace
+                  } deriving Show
+
+$(deriveJSONMsg ''PauseEvent)

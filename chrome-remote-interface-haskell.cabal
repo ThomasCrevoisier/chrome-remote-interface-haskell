@@ -33,6 +33,8 @@ executable chrome-remote-interface-haskell
                      , Chrome.API.Debugger
                      , Chrome.API.Debugger.Types
                      , Chrome.API.Runtime.Types
+                     , Chrome.API.Emulation
+                     , Chrome.API.Emulation.Types
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5
                      , http-client

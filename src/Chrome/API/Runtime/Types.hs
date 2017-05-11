@@ -7,6 +7,8 @@ module Chrome.API.Runtime.Types where
 import Data.Aeson
 import Data.Aeson.TH
 
+import Chrome.Target.Message.TH
+
 type UnserializableValue = String
 
 type RemoteObjectId = String
@@ -72,3 +74,125 @@ data CallArgument = CallArgument
                     } deriving Show
 
 $(deriveJSON defaultOptions{ omitNothingFields = True } ''CallArgument)
+
+data EvaluateParams = EvaluateParams
+                      { expression :: String
+                      , objectGroup :: Maybe String
+                      , includeCommandLineAPI :: Maybe Bool
+                      , silent :: Maybe Bool
+                      , contextId :: Maybe ExecutionContextId
+                      , returnByValue :: Maybe Bool
+                      , generatePreview :: Maybe Bool
+                      , userGesture :: Maybe Bool
+                      , awaitPromise :: Maybe Bool
+                      } deriving Show
+
+$(deriveJSONMsg ''EvaluateParams)
+
+data EvaluateResult = EvaluateResult
+                      { result :: RemoteObject
+                      , exceptionDetails :: Maybe ExceptionDetails
+                      } deriving Show
+
+$(deriveJSONMsg ''EvaluateResult)
+
+data AwaitPromiseParams = AwaitPromiseParams
+                          { promiseObjectId :: RemoteObjectId
+                          , returnByValue :: Maybe Bool
+                          , generatePreview :: Maybe Bool
+                          } deriving Show
+
+$(deriveJSONMsg ''AwaitPromiseParams)
+
+data CallFunctionOnParams = CallFunctionOnParams
+                            { objectId :: RemoteObjectId
+                            , functionDeclaration :: String
+                            , arguments :: Maybe [CallArgument]
+                            , silent :: Maybe Bool
+                            , returnByValue :: Maybe Bool
+                            , generatePreview :: Maybe Bool
+                            , userGesture :: Maybe Bool
+                            , awaitPromise :: Maybe Bool
+                            } deriving Show
+
+$(deriveJSONMsg ''CallFunctionOnParams)
+
+data GetPropertiesParams = GetPropertiesParams
+                           { objectId :: RemoteObjectId
+                           , ownProperties :: Maybe Bool
+                           , accessorPropertiesOnly :: Maybe Bool
+                           , generatePreview :: Maybe Bool
+                           } deriving Show
+
+$(deriveJSONMsg ''GetPropertiesParams)
+
+data PropertyDescriptor = PropertyDescriptor
+                          { name :: String
+                          , value :: Maybe RemoteObject
+                          , writeable :: Maybe Bool
+                          , get :: Maybe RemoteObject
+                          , set :: Maybe RemoteObject
+                          , configurable :: Bool
+                          , enumerable :: Bool
+                          , wasThrown :: Maybe Bool
+                          , isOwn :: Maybe Bool
+                          , symbol :: Maybe RemoteObject
+                          } deriving Show
+
+$(deriveJSONMsg ''PropertyDescriptor)
+
+data InternalPropertyDescriptor = InternalPropertyDescriptor
+                                  { name :: String
+                                  , value :: Maybe RemoteObject
+                                  } deriving Show
+
+$(deriveJSONMsg ''InternalPropertyDescriptor)
+
+data GetPropertiesResult = GetPropertiesResult
+                           { result :: [PropertyDescriptor]
+                           , internalProperties :: [InternalPropertyDescriptor]
+                           , exceptionDetail :: Maybe ExceptionDetails
+                           } deriving Show
+
+$(deriveJSONMsg ''GetPropertiesResult)
+
+data ReleaseObjectParams = ReleaseObjectParams
+                           { objectId :: RemoteObjectId }
+                           deriving Show
+
+$(deriveJSONMsg ''ReleaseObjectParams)
+
+data ReleaseObjectGroupParams = ReleaseObjectGroupParams
+                                { objectGroup :: String }
+                                deriving Show
+
+$(deriveJSONMsg ''ReleaseObjectGroupParams)
+
+data CompileScriptParams = CompileScriptParams
+                           { expression :: String
+                           , sourceURL :: String
+                           , persistScript :: Bool
+                           , executionContextId :: Maybe ExecutionContextId
+                           } deriving Show
+
+$(deriveJSONMsg ''CompileScriptParams)
+
+data CompileScriptResult = CompileScriptResult
+                           { scriptId :: Maybe ScriptId
+                           , exceptionDetails :: Maybe ExceptionDetails
+                           } deriving Show
+
+$(deriveJSONMsg ''CompileScriptResult)
+
+data RunScriptParams = RunScriptParams
+                       { scriptId :: ScriptId
+                       , executionContextId :: Maybe ExecutionContextId
+                       , objectGroup :: Maybe String
+                       , silent :: Maybe Bool
+                       , includeCommandLineAPI :: Maybe Bool
+                       , returnByValue :: Maybe Bool
+                       , generatePreview :: Maybe Bool
+                       , awaitPromise :: Maybe Bool
+                       } deriving Show
+
+$(deriveJSONMsg ''RunScriptParams)

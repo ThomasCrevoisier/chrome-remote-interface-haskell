@@ -32,6 +32,7 @@ executable chrome-remote-interface-haskell
                      , Chrome.API.DOMDebugger.Types
                      , Chrome.API.Debugger
                      , Chrome.API.Debugger.Types
+                     , Chrome.API.Runtime
                      , Chrome.API.Runtime.Types
                      , Chrome.API.Emulation
                      , Chrome.API.Emulation.Types

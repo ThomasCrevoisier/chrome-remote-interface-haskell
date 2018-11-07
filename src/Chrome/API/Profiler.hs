@@ -1,9 +1,9 @@
 module Chrome.API.Profiler where
 
-import Chrome.Target.Message
-import Chrome.Target.Client
+import           Chrome.Target.Client
+import           Chrome.Target.Message
 
-import Chrome.API.Profiler.Types
+import           Chrome.API.Profiler.Types
 
 enable :: TargetClientAsync (MethodResult AnyResult)
 enable = callMethod $ Method "Profiler.enable" noParam

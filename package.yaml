@@ -1,0 +1,37 @@
+name:                chrome-remote-interface-haskell
+version:             0.1.0.0
+license:             BSD3
+author:              Crevoisier Thomas
+maintainer:          crevoisier.thomas@gmail.com
+copyright:           2018 Thomas Crevoisier
+category:            Web
+description:         Haskell implementation of the Chrome Remote Debugging Protocol
+
+extra-source-files:
+- README.md
+
+library:
+  source-dirs: src
+  ghc-options:
+  - -Wall
+  - -Werror
+  - -fprint-potential-instances
+
+  dependencies:
+  - base
+  - aeson
+  - async
+  - base64-bytestring
+  - bytestring
+  - containers
+  - http-client
+  - lifted-async
+  - mtl
+  - network
+  - random
+  - stm
+  - template-haskell
+  - text
+  - transformers
+  - url
+  - websockets

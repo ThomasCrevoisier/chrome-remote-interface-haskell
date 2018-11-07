@@ -1,16 +1,13 @@
-{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DuplicateRecordFields #-}
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE TemplateHaskell       #-}
 
 module Chrome.API.Schema.Types where
 
-import Data.Aeson
-import Data.Aeson.TH
-
-import Chrome.Target.Message.TH
+import           Chrome.Target.Message.TH
 
 data Domain = Domain
-              { name :: String
+              { name    :: String
               , version :: String
               } deriving Show
 

@@ -1,30 +1,23 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+-- TODO : make a Tutorial module
 module Main where
 
-import Data.Maybe
-import Data.Foldable (traverse_)
+import           Data.Foldable        (traverse_)
 
-import Control.Monad.Trans (liftIO)
+import           Control.Monad.Trans  (liftIO)
 
-import Chrome.Target
-import Chrome.Target.Client
-import Chrome.Target.Async (waitFor, onEvent, stopEventListener)
+import           Chrome.Target
+import           Chrome.Target.Async  (onEvent, stopEventListener, waitFor)
+import           Chrome.Target.Client
 
-import qualified Chrome.API.Page as Page
-import qualified Chrome.API.DOM as DOM
-import qualified Chrome.API.Network as Network
-import qualified Chrome.API.DOMDebugger as DOMDebugger
-import qualified Chrome.API.Debugger as Debugger
-import qualified Chrome.API.Emulation as Emulation
-import qualified Chrome.API.Input as Input
-import qualified Chrome.API.Profiler as Profiler
-import qualified Chrome.API.Runtime as Runtime
-import qualified Chrome.API.Schema as Schema
+import qualified Chrome.API.Network   as Network
+import qualified Chrome.API.Page      as Page
 
+-- TODO : use Safe.headMay
 head' :: [a] -> Maybe a
 head' (x:_) = Just x
-head' _ = Nothing
+head' _     = Nothing
 
 sampleCommands :: TargetClient ()
 sampleCommands = do
@@ -32,8 +25,8 @@ sampleCommands = do
 
   listener <- onEvent Network.onRequestWillBeSent (liftIO . printRequest)
 
-  waitFor $ Page.navigate "http://gitlab.com"
-  waitFor Page.onLoadEventFired
+  _ <- waitFor $ Page.navigate "http://gitlab.com"
+  _ <- waitFor Page.onLoadEventFired
 
   stopEventListener listener
 
@@ -41,7 +34,7 @@ sampleCommands = do
 
   where
     printRequest (Right event) = print event
-    printRequest (Left err) = print err
+    printRequest (Left err)    = print err
 
 main :: IO ()
 main = do
@@ -49,4 +42,4 @@ main = do
   let firstPage = head' =<< pages
   case firstPage of
     Nothing -> putStrLn "No page found"
-    Just p -> withTarget p sampleCommands
+    Just p  -> withTarget p sampleCommands

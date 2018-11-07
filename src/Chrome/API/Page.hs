@@ -18,12 +18,12 @@ module Chrome.API.Page (
     , onNavigationRequested
     ) where
 
-import Data.Map (Map, empty, insert)
+import           Data.Map              (empty, insert)
 
-import Chrome.Target.Message
-import Chrome.Target.Client
+import           Chrome.Target.Client
+import           Chrome.Target.Message
 
-import Chrome.API.Page.Types
+import           Chrome.API.Page.Types
 
 enable :: TargetClientAsync (MethodResult AnyResult)
 enable = callMethod $ Method "Page.enable" noParam
@@ -35,7 +35,7 @@ reload :: PageReloadParams -> TargetClientAsync (MethodResult AnyResult)
 reload = callMethod . Method "Page.reload"
 
 navigate :: String -> TargetClientAsync (MethodResult FrameId)
-navigate url = callMethod $ Method "Page.navigate" (insert "url" url empty)
+navigate url' = callMethod $ Method "Page.navigate" (insert "url" url' empty)
 
 handleJavaScriptDialog :: PageHandleDialogParams -> TargetClientAsync (MethodResult AnyResult)
 handleJavaScriptDialog = callMethod . Method "Page.handleJavaScriptDialog"

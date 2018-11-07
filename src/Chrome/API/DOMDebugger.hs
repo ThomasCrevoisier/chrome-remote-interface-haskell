@@ -1,9 +1,9 @@
 module Chrome.API.DOMDebugger where
 
-import Chrome.Target.Message
-import Chrome.Target.Client
+import           Chrome.Target.Client
+import           Chrome.Target.Message
 
-import Chrome.API.DOMDebugger.Types
+import           Chrome.API.DOMDebugger.Types
 
 setDOMBreakpoint :: DOMBreakpointParams -> TargetClientAsync (MethodResult AnyResult)
 setDOMBreakpoint = callMethod . Method "DOMDebugger.setDOMBreakpoint"

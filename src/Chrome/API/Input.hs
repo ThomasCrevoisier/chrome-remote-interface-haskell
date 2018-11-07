@@ -1,9 +1,9 @@
 module Chrome.API.Input where
 
-import Chrome.Target.Message
-import Chrome.Target.Client
+import           Chrome.Target.Client
+import           Chrome.Target.Message
 
-import Chrome.API.Input.Types
+import           Chrome.API.Input.Types
 
 dispatchKeyEvent :: KeyEvent -> TargetClientAsync (MethodResult AnyResult)
 dispatchKeyEvent = callMethod . Method "Input.dispatchKeyEvent"

@@ -1,9 +1,9 @@
 module Chrome.API.Runtime where
 
-import Chrome.Target.Message
-import Chrome.Target.Client
+import           Chrome.Target.Client
+import           Chrome.Target.Message
 
-import Chrome.API.Runtime.Types
+import           Chrome.API.Runtime.Types
 
 evaluate :: EvaluateParams -> TargetClientAsync (MethodResult EvaluateResult)
 evaluate = callMethod . Method "Runtime.evaluate"

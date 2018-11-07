@@ -1,17 +1,29 @@
-module Chrome.API.Network (
-    module Chrome.API.Network.Types
+module Chrome.API.Network
+  ( module Chrome.API.Network.Types
   , enable
   , disable
+  , setUserAgentOverride
+  , setExtraHTTPHeaders
+  , getResponseBody
+  , canClearBrowserCache
+  , clearBrowserCache
+  , canClearBrowserCookies
+  , clearBrowserCookies
+  , emulateNetworkConditions
+  , setCacheDisabled
   , onRequestWillBeSent
-  ) where
+  , onRequestServedFromCache
+  , onResponseReceived
+  , onDataReceived
+  , onLoadingFinished
+  , onLoadingFailed ) where
 
-import Data.Aeson (Value)
-import Data.Map (Map, empty, insert)
+import           Data.Map                 (empty, insert)
 
-import Chrome.Target.Message
-import Chrome.Target.Client
+import           Chrome.Target.Client
+import           Chrome.Target.Message
 
-import Chrome.API.Network.Types
+import           Chrome.API.Network.Types
 
 enable :: NetworkEnableParams -> TargetClientAsync (MethodResult AnyResult)
 enable = callMethod . Method "Network.enable"
@@ -26,7 +38,7 @@ setExtraHTTPHeaders :: Headers -> TargetClientAsync (MethodResult AnyResult)
 setExtraHTTPHeaders = callMethod . Method "Network.setExtraHTTPHeaders"
 
 getResponseBody :: String -> TargetClientAsync (MethodResult ResponseBody)
-getResponseBody requestId = callMethod $ Method "Network.getResponseBody" (insert "requestId" requestId empty)
+getResponseBody requestId' = callMethod $ Method "Network.getResponseBody" (insert "requestId" requestId' empty)
 
 canClearBrowserCache :: TargetClientAsync (MethodResult CanClear)
 canClearBrowserCache = callMethod $ Method "Network.canClearBrowserCache" noParam

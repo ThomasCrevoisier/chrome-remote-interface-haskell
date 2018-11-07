@@ -1,18 +1,15 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE RecordWildCards #-}
 
 module Chrome.Target.Message where
 
-import Data.Aeson
-import Data.Aeson.Types
+import           Data.Aeson
+import           Data.Aeson.Types
 
-import Data.Text as T
-import Data.ByteString.Lazy.Char8 as B8
+import           Data.ByteString.Lazy.Char8 as B8
+import           Data.Text                  as T
 
-import Data.Map
-
-import System.Random (randomRIO)
-import Control.Applicative ((<|>))
+import           Control.Applicative        ((<|>))
+import           System.Random              (randomRIO)
 
 data Method a = Method { _cmdMethod :: String
                        , _cmdParams :: a
@@ -27,7 +24,7 @@ noParam :: Value
 noParam = emptyObject
 
 instance ToJSON a => ToJSON (OutgoingMsg a) where
-  toJSON (OutgoingMsg msgId cmd) = object [ "id" .= msgId
+  toJSON (OutgoingMsg msgId' cmd) = object [ "id" .= msgId'
                                           , "method" .= _cmdMethod cmd
                                           , "params" .= _cmdParams cmd
                                           ]
@@ -55,7 +52,7 @@ instance FromJSON a => FromJSON (EventResponse a) where
                                             <$> o .: "method"
                                             <*> ((Right <$> o .: "params") <|> ((Left . ResponseMsgError) <$> o .: "error") <|> (pure $ Left ResponseParsingError))
 
-data MethodResponse a = MethodResponse { _resId :: Int
+data MethodResponse a = MethodResponse { _resId     :: Int
                                        , _resResult :: MethodResult a
                                        } deriving Show
 
@@ -67,9 +64,9 @@ data ResponseError
   deriving Show
 
 data ErrorMsg
-  = ErrorMsg { _errCode :: Int
+  = ErrorMsg { _errCode    :: Int
              , _errMessage :: String
-             , _errData :: String
+             , _errData    :: String
              } deriving Show
 
 instance FromJSON ErrorMsg where

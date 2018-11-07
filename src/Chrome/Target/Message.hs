@@ -2,14 +2,14 @@
 
 module Chrome.Target.Message where
 
-import Data.Aeson
-import Data.Aeson.Types
+import           Data.Aeson
+import           Data.Aeson.Types
 
-import Data.Text as T
-import Data.ByteString.Lazy.Char8 as B8
+import           Data.ByteString.Lazy.Char8 as B8
+import           Data.Text                  as T
 
-import System.Random (randomRIO)
-import Control.Applicative ((<|>))
+import           Control.Applicative        ((<|>))
+import           System.Random              (randomRIO)
 
 data Method a = Method { _cmdMethod :: String
                        , _cmdParams :: a
@@ -52,7 +52,7 @@ instance FromJSON a => FromJSON (EventResponse a) where
                                             <$> o .: "method"
                                             <*> ((Right <$> o .: "params") <|> ((Left . ResponseMsgError) <$> o .: "error") <|> (pure $ Left ResponseParsingError))
 
-data MethodResponse a = MethodResponse { _resId :: Int
+data MethodResponse a = MethodResponse { _resId     :: Int
                                        , _resResult :: MethodResult a
                                        } deriving Show
 
@@ -64,9 +64,9 @@ data ResponseError
   deriving Show
 
 data ErrorMsg
-  = ErrorMsg { _errCode :: Int
+  = ErrorMsg { _errCode    :: Int
              , _errMessage :: String
-             , _errData :: String
+             , _errData    :: String
              } deriving Show
 
 instance FromJSON ErrorMsg where

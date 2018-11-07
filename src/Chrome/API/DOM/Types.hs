@@ -1,21 +1,21 @@
-{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DuplicateRecordFields #-}
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE TemplateHaskell       #-}
 
 module Chrome.API.DOM.Types where
 
-import Data.Aeson
-import Data.Aeson.TH
+import           Data.Aeson
+import           Data.Aeson.TH
 
 data RequestChildNodesParams = RequestChildNodesParams
                                {
                                  nodeId :: Int
-                               , depth :: Maybe Int
+                               , depth  :: Maybe Int
                                } deriving Show
 
 $(deriveJSON defaultOptions{ omitNothingFields = True } ''RequestChildNodesParams)
 
-data QuerySelectorParam = QuerySelectorParam { nodeId :: Int
+data QuerySelectorParam = QuerySelectorParam { nodeId   :: Int
                                              , selector :: String
                                              } deriving Show
 
@@ -37,7 +37,7 @@ data QuerySelectorAllResponse = QuerySelectorAllResponse
 $(deriveJSON defaultOptions{ omitNothingFields = True } ''QuerySelectorAllResponse)
 
 data Node = Node
-            { nodeId :: Int
+            { nodeId   :: Int
             , nodeName :: String
             } deriving Show
 
@@ -50,7 +50,7 @@ $(deriveJSON defaultOptions{ omitNothingFields = True } ''GetDocumentResponse)
 
 data NodeNameParams = NodeNameParams
                       { nodeId :: Int
-                      , name :: String
+                      , name   :: String
                       } deriving Show
 
 $(deriveJSON defaultOptions{ omitNothingFields = True } ''NodeNameParams)
@@ -63,7 +63,7 @@ $(deriveJSON defaultOptions{ omitNothingFields = True } ''NodeNameResult)
 
 data NodeValueParams = NodeValueParams
                        { nodeId :: Int
-                       , value :: String
+                       , value  :: String
                        } deriving Show
 
 $(deriveJSON defaultOptions{ omitNothingFields = True } ''NodeValueParams)
@@ -76,23 +76,23 @@ $(deriveJSON defaultOptions{ omitNothingFields = True } ''RemoveNodeParams)
 
 data SetAttributeParams = SetAttributeParams
                           { nodeId :: Int
-                          , name :: String
-                          , value :: String
+                          , name   :: String
+                          , value  :: String
                           } deriving Show
 
 $(deriveJSON defaultOptions{ omitNothingFields = True } ''SetAttributeParams)
 
 data SetAttributesAsTextParams = SetAttributesAsTextParams
                                  { nodeId :: Int
-                                 , text :: String
-                                 , name :: Maybe String
+                                 , text   :: String
+                                 , name   :: Maybe String
                                  } deriving Show
 
 $(deriveJSON defaultOptions{ omitNothingFields = True } ''SetAttributesAsTextParams)
 
 data RemoveAttributeParams = RemoveAttributeParams
                              { nodeId :: Int
-                             , name :: String
+                             , name   :: String
                              } deriving Show
 
 $(deriveJSON defaultOptions{ omitNothingFields = True } ''RemoveAttributeParams)
@@ -109,7 +109,7 @@ data OuterHTML = OuterHTML
 $(deriveJSON defaultOptions{ omitNothingFields = True } ''OuterHTML)
 
 data SetOuterHTMLParams = SetOuterHTMLParams
-                          { nodeId :: Int
+                          { nodeId    :: Int
                           , outerHTML :: String
                           } deriving Show
 
@@ -137,64 +137,64 @@ data RGBA = RGBA
 $(deriveJSON defaultOptions{ omitNothingFields = True } ''RGBA)
 
 data HighlightRectParams = HighlightRectParams
-                            { x :: Int
-                            , y :: Int
-                            , width :: Int
-                            , height :: Int
-                            , color :: Maybe RGBA
+                            { x            :: Int
+                            , y            :: Int
+                            , width        :: Int
+                            , height       :: Int
+                            , color        :: Maybe RGBA
                             , outlineColor :: Maybe RGBA
                             } deriving Show
 
 $(deriveJSON defaultOptions{ omitNothingFields = True } ''HighlightRectParams)
 
 data HighlightConfig = HighlightConfig
-                       { showInfo :: Maybe Bool
-                       , showRulers :: Maybe Bool
+                       { showInfo           :: Maybe Bool
+                       , showRulers         :: Maybe Bool
                        , showExtensionLines :: Maybe Bool
-                       , displayAsMaterial :: Maybe Bool
-                       , contentColor :: Maybe RGBA
-                       , paddingColor :: Maybe RGBA
-                       , borderColor :: Maybe RGBA
-                       , marginColor :: Maybe RGBA
-                       , eventTargetColor :: Maybe RGBA
-                       , shapeColor :: Maybe RGBA
-                       , shapeMarginColor :: Maybe RGBA
-                       , selectorList :: Maybe String
+                       , displayAsMaterial  :: Maybe Bool
+                       , contentColor       :: Maybe RGBA
+                       , paddingColor       :: Maybe RGBA
+                       , borderColor        :: Maybe RGBA
+                       , marginColor        :: Maybe RGBA
+                       , eventTargetColor   :: Maybe RGBA
+                       , shapeColor         :: Maybe RGBA
+                       , shapeMarginColor   :: Maybe RGBA
+                       , selectorList       :: Maybe String
                        } deriving Show
 
 $(deriveJSON defaultOptions{ omitNothingFields = True } ''HighlightConfig)
 
 data HighlightNodeParams = HighlightNodeParams
                            { highlightConfig :: HighlightConfig
-                           , nodeId :: Maybe Int
-                           , backendNodeId :: Maybe Int
-                           , objectId :: Maybe String
+                           , nodeId          :: Maybe Int
+                           , backendNodeId   :: Maybe Int
+                           , objectId        :: Maybe String
                            } deriving Show
 
 $(deriveJSON defaultOptions{ omitNothingFields = True } ''HighlightNodeParams)
 
 data ResolveNodeParams = ResolveNodeParams
-                         { nodeId :: Int
+                         { nodeId      :: Int
                          , objectGroup :: Maybe String
                          } deriving Show
 
 $(deriveJSON defaultOptions{ omitNothingFields = True } ''ResolveNodeParams)
 
 data RemoteObject = RemoteObject
-                    { _type :: String
-                    , subtype :: String
-                    , className :: Maybe String
-                    , value :: Maybe Value
+                    { _type               :: String
+                    , subtype             :: String
+                    , className           :: Maybe String
+                    , value               :: Maybe Value
                     , unserializableValue :: Maybe String
-                    , description :: Maybe String
-                    , objectId :: Maybe String
+                    , description         :: Maybe String
+                    , objectId            :: Maybe String
                     } deriving Show
 
 
 $(deriveJSON defaultOptions{
      omitNothingFields = True
    , fieldLabelModifier = let f "type" = "_type"
-                              f str = str
+                              f str    = str
                               in
                             f
 } ''RemoteObject)
@@ -212,8 +212,8 @@ data AttributesResult = AttributesResult
 $(deriveJSON defaultOptions ''AttributesResult)
 
 data MoveToParams = MoveToParams
-                    { nodeId :: Int
-                    , targetNodeId :: Int
+                    { nodeId             :: Int
+                    , targetNodeId       :: Int
                     , insertBeforeNodeId :: Maybe Int
                     } deriving Show
 
@@ -221,51 +221,51 @@ $(deriveJSON defaultOptions{ omitNothingFields = True } ''MoveToParams)
 
 data SetChildNodesEvent = SetChildNodesEvent
                           { parentId :: Int
-                          , nodes :: [Node]
+                          , nodes    :: [Node]
                           } deriving Show
 
 $(deriveJSON defaultOptions ''SetChildNodesEvent)
 
 data AttributeModifiedEvent = AttributeModifiedEvent
                               { nodeId :: Int
-                              , name :: String
-                              , value :: String
+                              , name   :: String
+                              , value  :: String
                               } deriving Show
 
 $(deriveJSON defaultOptions ''AttributeModifiedEvent)
 
 data AttributeRemovedEvent = AttributeRemovedEvent
                              { nodeId :: Int
-                             , name :: String
+                             , name   :: String
                              } deriving Show
 
 $(deriveJSON defaultOptions ''AttributeRemovedEvent)
 
 data CharDataModifiedEvent = CharDataModifiedEvent
-                             { nodeId :: Int
+                             { nodeId        :: Int
                              , characterData :: String
                              } deriving Show
 
 $(deriveJSON defaultOptions ''CharDataModifiedEvent)
 
 data ChildNodeCountEvent = ChildNodeCountEvent
-                           { nodeId :: Int
+                           { nodeId         :: Int
                            , childNodeCount :: Int
                            } deriving Show
 
 $(deriveJSON defaultOptions ''ChildNodeCountEvent)
 
 data ChildNodeInsertedEvent = ChildNodeInsertedEvent
-                              { parentNodeId :: Int
+                              { parentNodeId   :: Int
                               , previousNodeId :: Int
-                              , node :: Node
+                              , node           :: Node
                               } deriving Show
 
 $(deriveJSON defaultOptions ''ChildNodeInsertedEvent)
 
 data ChildNodeRemovedEvent = ChildNodeRemovedEvent
                              { parentNodeId :: Int
-                             , nodeId :: Int
+                             , nodeId       :: Int
                              } deriving Show
 
 $(deriveJSON defaultOptions ''ChildNodeRemovedEvent)

@@ -1,9 +1,9 @@
 module Chrome.API.Emulation where
 
-import Chrome.Target.Message
-import Chrome.Target.Client
+import           Chrome.Target.Client
+import           Chrome.Target.Message
 
-import Chrome.API.Emulation.Types
+import           Chrome.API.Emulation.Types
 
 setDeviceMetricsOverride :: SetMetricsOverrideParams -> TargetClientAsync (MethodResult AnyResult)
 setDeviceMetricsOverride = callMethod . Method "Emulation.setDeviceMetricsOverride"

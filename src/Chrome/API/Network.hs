@@ -18,12 +18,12 @@ module Chrome.API.Network
   , onLoadingFinished
   , onLoadingFailed ) where
 
-import Data.Map (empty, insert)
+import           Data.Map                 (empty, insert)
 
-import Chrome.Target.Message
-import Chrome.Target.Client
+import           Chrome.Target.Client
+import           Chrome.Target.Message
 
-import Chrome.API.Network.Types
+import           Chrome.API.Network.Types
 
 enable :: NetworkEnableParams -> TargetClientAsync (MethodResult AnyResult)
 enable = callMethod . Method "Network.enable"

@@ -1,9 +1,9 @@
 module Chrome.API.Debugger where
 
-import Chrome.Target.Message
-import Chrome.Target.Client
+import           Chrome.Target.Client
+import           Chrome.Target.Message
 
-import Chrome.API.Debugger.Types
+import           Chrome.API.Debugger.Types
 
 enable :: TargetClientAsync (MethodResult AnyResult)
 enable = callMethod $ Method "Debugger.enable" noParam

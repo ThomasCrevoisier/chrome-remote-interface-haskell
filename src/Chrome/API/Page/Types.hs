@@ -1,15 +1,15 @@
-{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DuplicateRecordFields #-}
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE TemplateHaskell       #-}
 
 module Chrome.API.Page.Types where
 
-import Data.Aeson
-import Data.Aeson.TH
+import           Data.Aeson
+import           Data.Aeson.TH
 
 data PageReloadParams = PageReloadParams
                         {
-                          ignoreCache :: Bool
+                          ignoreCache            :: Bool
                         , scriptToEvaluateOnLoad :: Maybe String
                         } deriving Show
 
@@ -17,7 +17,7 @@ $(deriveJSON defaultOptions{ omitNothingFields = True } ''PageReloadParams)
 
 data PageHandleDialogParams = PageHandleDialogParams
                               {
-                                accept :: Bool
+                                accept     :: Bool
                               , promptText :: Maybe String
                               } deriving Show
 
@@ -31,8 +31,8 @@ instance FromJSON FrameId where
 
 data CaptureScreenshotParams = CaptureScreenshotParams
                                 {
-                                  format :: String
-                                , quality :: Int
+                                  format      :: String
+                                , quality     :: Int
                                 , fromSurface :: Bool
                                 } deriving Show
 
@@ -54,7 +54,7 @@ instance FromJSON TimestampEvent where
 
 data FrameAttachedEvent = FrameAttachedEvent
                           {
-                            frameId :: String
+                            frameId       :: String
                           , parentFrameId :: String
                           } deriving Show
 
@@ -62,13 +62,13 @@ $(deriveJSON defaultOptions{ omitNothingFields = True } ''FrameAttachedEvent)
 
 data Frame = Frame
              {
-               id :: String
-             , parentId :: Maybe String
-             , loadedId :: String
-             , name :: Maybe String
-             , url :: String
+               id             :: String
+             , parentId       :: Maybe String
+             , loadedId       :: String
+             , name           :: Maybe String
+             , url            :: String
              , securityOrigin :: String
-             , mimeType :: String
+             , mimeType       :: String
              } deriving Show
 
 $(deriveJSON defaultOptions{ omitNothingFields = True } ''Frame)
@@ -78,7 +78,7 @@ type DialogType = String
 data DialogOpeningEvent = DialogOpeningEvent
                           {
                             _dialogMessage :: String
-                          , _dialogType :: DialogType
+                          , _dialogType    :: DialogType
                           } deriving Show
 
 instance FromJSON DialogOpeningEvent where
@@ -95,9 +95,9 @@ instance FromJSON DialogClosingEvent where
 data NavigationRequestEvent = NavigationRequestEvent
                               {
                                 isInMainFrame :: Bool
-                              , isRedirect :: Bool
-                              , navigationId :: Int
-                              , url :: String
+                              , isRedirect    :: Bool
+                              , navigationId  :: Int
+                              , url           :: String
                               } deriving Show
 
 $(deriveJSON defaultOptions{ omitNothingFields = True } ''NavigationRequestEvent)

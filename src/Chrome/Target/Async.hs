@@ -1,12 +1,12 @@
 module Chrome.Target.Async where
 
-import Control.Monad (forever)
-import Control.Monad.Trans (liftIO)
+import           Control.Monad                   (forever)
+import           Control.Monad.Trans             (liftIO)
 
-import Control.Concurrent.Async as Async
-import Control.Concurrent.Async.Lifted as AsyncL
+import           Control.Concurrent.Async        as Async
+import           Control.Concurrent.Async.Lifted as AsyncL
 
-import Chrome.Target.Client
+import           Chrome.Target.Client
 
 waitFor :: TargetClientAsync a -> TargetClient a
 waitFor action = liftIO . Async.wait =<< action

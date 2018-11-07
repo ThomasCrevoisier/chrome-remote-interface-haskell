@@ -1,10 +1,10 @@
-{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DuplicateRecordFields #-}
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE TemplateHaskell       #-}
 
 module Chrome.API.Emulation.Types where
 
-import Chrome.Target.Message.TH (deriveJSONMsg)
+import           Chrome.Target.Message.TH (deriveJSONMsg)
 
 data ScreenOrientation = ScreenOrientation
                          { _type :: String
@@ -14,23 +14,23 @@ data ScreenOrientation = ScreenOrientation
 $(deriveJSONMsg ''ScreenOrientation)
 
 data SetMetricsOverrideParams = SetMetricsOverrideParams
-                                { width :: Int
-                                , height :: Int
+                                { width             :: Int
+                                , height            :: Int
                                 , deviceScaleFactor :: Double
-                                , mobile :: Bool
-                                , fitWindow :: Bool
-                                , scale :: Maybe Double
-                                , screenWidth :: Maybe Int
-                                , screenHeight :: Maybe Int
-                                , positionX :: Maybe Int
-                                , positionY :: Maybe Int
+                                , mobile            :: Bool
+                                , fitWindow         :: Bool
+                                , scale             :: Maybe Double
+                                , screenWidth       :: Maybe Int
+                                , screenHeight      :: Maybe Int
+                                , positionX         :: Maybe Int
+                                , positionY         :: Maybe Int
                                 , screenOrientation :: Maybe ScreenOrientation
                                 } deriving Show
 
 $(deriveJSONMsg ''SetMetricsOverrideParams)
 
 data TouchEmulationEnabledParams = TouchEmulationEnabledParams
-                             { enabled :: Bool
+                             { enabled       :: Bool
                              , configuration :: Maybe String
                              } deriving Show
 

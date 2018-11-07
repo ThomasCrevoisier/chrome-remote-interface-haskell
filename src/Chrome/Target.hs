@@ -1,18 +1,20 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE RecordWildCards   #-}
 
 module Chrome.Target where
 
-import Data.Aeson
-import Data.Maybe
+import           Data.Aeson
+import           Data.Maybe
 
-import Network.HTTP.Client (parseRequest, newManager, httpLbs, defaultManagerSettings, responseBody)
-import Network.URL
+import           Network.HTTP.Client        (defaultManagerSettings, httpLbs,
+                                             newManager, parseRequest,
+                                             responseBody)
+import           Network.URL
 
-import Chrome.Target.DebuggingURL
+import           Chrome.Target.DebuggingURL
 
-data Target = Target { _targetId :: String
-                     , _targetTitle :: String
+data Target = Target { _targetId            :: String
+                     , _targetTitle         :: String
                      , _targetWSDebuggerURL :: DebuggingURL
                      } deriving Show
 

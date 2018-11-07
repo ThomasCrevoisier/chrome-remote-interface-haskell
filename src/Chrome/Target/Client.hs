@@ -1,21 +1,21 @@
 module Chrome.Target.Client where
 
-import Network.WebSockets as WS
+import           Network.WebSockets           as WS
 
-import Control.Monad
-import Control.Monad.Trans
-import Control.Monad.Trans.Reader
+import           Control.Monad
+import           Control.Monad.Trans
+import           Control.Monad.Trans.Reader
 
-import Data.Aeson
-import Data.Text as T
-import qualified Data.ByteString.Lazy.Char8 as B8
+import           Data.Aeson
+import qualified Data.ByteString.Lazy.Char8   as B8
+import           Data.Text                    as T
 
-import Control.Monad.STM (atomically)
-import Control.Concurrent.Async
-import Control.Concurrent.STM.TChan
+import           Control.Concurrent.Async
+import           Control.Concurrent.STM.TChan
+import           Control.Monad.STM            (atomically)
 
-import Chrome.Target
-import Chrome.Target.Message
+import           Chrome.Target
+import           Chrome.Target.Message
 
 socketClient :: (TChan T.Text, TChan T.Text) -> WS.ClientApp ()
 socketClient (inChan, outChan) conn = do

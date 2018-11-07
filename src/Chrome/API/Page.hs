@@ -18,12 +18,12 @@ module Chrome.API.Page (
     , onNavigationRequested
     ) where
 
-import Data.Map (empty, insert)
+import           Data.Map              (empty, insert)
 
-import Chrome.Target.Message
-import Chrome.Target.Client
+import           Chrome.Target.Client
+import           Chrome.Target.Message
 
-import Chrome.API.Page.Types
+import           Chrome.API.Page.Types
 
 enable :: TargetClientAsync (MethodResult AnyResult)
 enable = callMethod $ Method "Page.enable" noParam

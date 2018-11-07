@@ -1,13 +1,13 @@
-{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DuplicateRecordFields #-}
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE TemplateHaskell       #-}
 
 module Chrome.API.Profiler.Types where
 
-import Chrome.Target.Message.TH (deriveJSONMsg)
+import           Chrome.Target.Message.TH  (deriveJSONMsg)
 
-import Chrome.API.Runtime.Types (CallFrame)
-import Chrome.API.Debugger.Types (Location)
+import           Chrome.API.Debugger.Types (Location)
+import           Chrome.API.Runtime.Types  (CallFrame)
 
 data SamplingIntervalParam = SamplingIntervalParam
                              { interval :: Int }
@@ -16,20 +16,20 @@ data SamplingIntervalParam = SamplingIntervalParam
 $(deriveJSONMsg ''SamplingIntervalParam)
 
 data ProfileNode = ProfileNode
-                   { id :: Int
-                   , callFrame :: CallFrame
-                   , hitCount :: Maybe Int
-                   , children :: Maybe [Int]
+                   { id          :: Int
+                   , callFrame   :: CallFrame
+                   , hitCount    :: Maybe Int
+                   , children    :: Maybe [Int]
                    , deoptReason :: Maybe String
                    } deriving Show
 
 $(deriveJSONMsg ''ProfileNode)
 
 data Profile = Profile
-               { nodes :: [ProfileNode]
-               , startTime :: Double
-               , endTime :: Double
-               , samples :: Maybe [Int]
+               { nodes      :: [ProfileNode]
+               , startTime  :: Double
+               , endTime    :: Double
+               , samples    :: Maybe [Int]
                , timeDeltas :: Maybe [Int]
                } deriving Show
 
@@ -42,18 +42,18 @@ data ProfileResult = ProfileResult
 $(deriveJSONMsg ''ProfileResult)
 
 data ProfileStartedEvent = ProfileStartedEvent
-                           { id :: String
+                           { id       :: String
                            , location :: Location
-                           , title :: Maybe String
+                           , title    :: Maybe String
                            } deriving Show
 
 $(deriveJSONMsg ''ProfileStartedEvent)
 
 data ProfileFinishedEvent = ProfileFinishedEvent
-                            { id :: String
+                            { id       :: String
                             , location :: Location
-                            , profile :: Profile
-                            , title :: Maybe String
+                            , profile  :: Profile
+                            , title    :: Maybe String
                             } deriving Show
 
 $(deriveJSONMsg ''ProfileFinishedEvent)

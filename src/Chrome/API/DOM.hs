@@ -3,10 +3,11 @@ module Chrome.API.DOM (
   , module Chrome.API.DOM
   ) where
 
-import Chrome.Target.Message
-import Chrome.Target.Client (callMethod, TargetClientAsync, listenToEventMethod)
+import           Chrome.Target.Client  (TargetClientAsync, callMethod,
+                                        listenToEventMethod)
+import           Chrome.Target.Message
 
-import Chrome.API.DOM.Types
+import           Chrome.API.DOM.Types
 
 enable :: TargetClientAsync (MethodResult AnyResult)
 enable = callMethod $ Method "DOM.enable" noParam

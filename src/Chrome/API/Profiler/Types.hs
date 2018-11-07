@@ -4,9 +4,6 @@
 
 module Chrome.API.Profiler.Types where
 
-import Data.Aeson
-import Data.Aeson.TH
-
 import Chrome.Target.Message.TH (deriveJSONMsg)
 
 import Chrome.API.Runtime.Types (CallFrame)

@@ -17,6 +17,7 @@ data NetworkEnableParams = NetworkEnableParams
 $(deriveJSON defaultOptions{ omitNothingFields = True } ''NetworkEnableParams)
 
 
+defaultEnableParams :: NetworkEnableParams
 defaultEnableParams = NetworkEnableParams Nothing Nothing
 
 type Headers = Map String String

@@ -9,6 +9,7 @@ newtype DebuggingURL
   deriving Show
 
 instance FromJSON DebuggingURL where
+  -- TODO : use `maybe`
   parseJSON = withText "url" $ \t -> case importURL (unpack t) of
                                        Just url -> return $ DebuggingURL url
                                        Nothing -> mempty

@@ -1,5 +1,4 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE RecordWildCards #-}
 
 module Chrome.Target.Message where
 
@@ -8,8 +7,6 @@ import Data.Aeson.Types
 
 import Data.Text as T
 import Data.ByteString.Lazy.Char8 as B8
-
-import Data.Map
 
 import System.Random (randomRIO)
 import Control.Applicative ((<|>))
@@ -27,7 +24,7 @@ noParam :: Value
 noParam = emptyObject
 
 instance ToJSON a => ToJSON (OutgoingMsg a) where
-  toJSON (OutgoingMsg msgId cmd) = object [ "id" .= msgId
+  toJSON (OutgoingMsg msgId' cmd) = object [ "id" .= msgId'
                                           , "method" .= _cmdMethod cmd
                                           , "params" .= _cmdParams cmd
                                           ]

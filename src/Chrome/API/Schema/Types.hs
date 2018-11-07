@@ -4,9 +4,6 @@
 
 module Chrome.API.Schema.Types where
 
-import Data.Aeson
-import Data.Aeson.TH
-
 import Chrome.Target.Message.TH
 
 data Domain = Domain

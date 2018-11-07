@@ -4,9 +4,6 @@
 
 module Chrome.API.Emulation.Types where
 
-import Data.Aeson
-import Data.Aeson.TH
-
 import Chrome.Target.Message.TH (deriveJSONMsg)
 
 data ScreenOrientation = ScreenOrientation

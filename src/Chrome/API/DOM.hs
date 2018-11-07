@@ -3,8 +3,6 @@ module Chrome.API.DOM (
   , module Chrome.API.DOM
   ) where
 
-import Data.Aeson
-
 import Chrome.Target.Message
 import Chrome.Target.Client (callMethod, TargetClientAsync, listenToEventMethod)
 

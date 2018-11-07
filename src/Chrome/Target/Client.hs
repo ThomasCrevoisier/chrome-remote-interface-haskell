@@ -1,22 +1,16 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Chrome.Target.Client where
 
-import Network.Socket (withSocketsDo)
 import Network.WebSockets as WS
 
 import Control.Monad
 import Control.Monad.Trans
 import Control.Monad.Trans.Reader
-import Control.Concurrent.Async (async, wait)
 
 import Data.Aeson
 import Data.Text as T
-import qualified Data.Text.IO as T
 import qualified Data.ByteString.Lazy.Char8 as B8
 
 import Control.Monad.STM (atomically)
-import Control.Concurrent (forkIO)
 import Control.Concurrent.Async
 import Control.Concurrent.STM.TChan
 
@@ -77,11 +71,11 @@ listenToEventMethod method = do
     liftIO $ async $ waitForMsg method chanRes
     where
         waitForMsg :: (FromJSON res) => String -> TChan T.Text -> IO (MethodResult res)
-        waitForMsg method inChan = do
+        waitForMsg method' inChan = do
             res <- atomically $ readTChan inChan
             let event = decode . B8.pack . T.unpack $ res
             case event of
-                Just (Event event') -> if _eventMethod event' == method
+                Just (Event event') -> if _eventMethod event' == method'
                                             then pure $ _eventContent event'
                                             else waitForMsg method inChan
                 _ -> waitForMsg method inChan
@@ -91,7 +85,7 @@ wsServer page = case wsClientFromTarget page of
   Nothing -> pure Nothing
   Just (domain', port', path') -> do
     (chanCmd, chanRes) <- dupWSChannels
-    server <- liftIO . async $ WS.runClient domain' (fromInteger port') path' (socketClient (chanCmd, chanRes))
+    void . liftIO . async $ WS.runClient domain' (fromInteger port') path' (socketClient (chanCmd, chanRes))
 
     -- TODO : remove this or use Either to encode error
     return $ Just ()
@@ -103,6 +97,5 @@ withTarget page actions = do
   where
     actions' :: TargetClient ()
     actions' = do
-      wsServer page
-      actions
-      return ()
+      void $ wsServer page
+      void actions

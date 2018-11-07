@@ -30,6 +30,7 @@ library:
   - network
   - random
   - stm
+  - template-haskell
   - text
   - transformers
   - url

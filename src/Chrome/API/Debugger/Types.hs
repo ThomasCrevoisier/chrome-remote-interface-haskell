@@ -5,7 +5,6 @@
 module Chrome.API.Debugger.Types where
 
 import Data.Aeson
-import Data.Aeson.TH
 
 import Chrome.Target.Message.TH (deriveJSONMsg)
 import Chrome.API.Runtime.Types (RemoteObject, ExceptionDetails, CallArgument, ExecutionContextId, ScriptId, StackTrace)

@@ -16,5 +16,3 @@ onEvent event action = AsyncL.async . forever $ waitFor event >>= action
 
 stopEventListener :: AsyncL.Async a -> TargetClient ()
 stopEventListener = AsyncL.cancel
-
-

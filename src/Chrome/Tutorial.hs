@@ -1,9 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 
--- TODO : make a Tutorial module
-module Main where
+module Chrome.Tutorial
+  ( main
+  ) where
 
+import           Control.Monad        (void)
 import           Data.Foldable        (traverse_)
+import           Safe                 (headMay)
 
 import           Control.Monad.Trans  (liftIO)
 
@@ -14,10 +17,12 @@ import           Chrome.Target.Client
 import qualified Chrome.API.Network   as Network
 import qualified Chrome.API.Page      as Page
 
--- TODO : use Safe.headMay
-head' :: [a] -> Maybe a
-head' (x:_) = Just x
-head' _     = Nothing
+main :: IO ()
+main = fetchTarget >>= maybe onPageNotFound runCommands
+  where
+    fetchTarget = (headMay =<<) <$> fetchTargets "http://localhost:9222"
+    onPageNotFound = error "No page found"
+    runCommands = (`withTarget` sampleCommands)
 
 sampleCommands :: TargetClient ()
 sampleCommands = do
@@ -25,21 +30,12 @@ sampleCommands = do
 
   listener <- onEvent Network.onRequestWillBeSent (liftIO . printRequest)
 
-  _ <- waitFor $ Page.navigate "http://gitlab.com"
-  _ <- waitFor Page.onLoadEventFired
+  void $ waitFor (Page.navigate "http://gitlab.com")
+  void $ waitFor Page.onLoadEventFired
 
   stopEventListener listener
 
   traverse_ waitFor [Page.disable, Network.disable]
 
   where
-    printRequest (Right event) = print event
-    printRequest (Left err)    = print err
-
-main :: IO ()
-main = do
-  pages <- fetchTargets "http://localhost:9222"
-  let firstPage = head' =<< pages
-  case firstPage of
-    Nothing -> putStrLn "No page found"
-    Just p  -> withTarget p sampleCommands
+    printRequest = either print print

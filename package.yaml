@@ -29,6 +29,7 @@ library:
   - mtl
   - network
   - random
+  - safe
   - stm
   - template-haskell
   - text

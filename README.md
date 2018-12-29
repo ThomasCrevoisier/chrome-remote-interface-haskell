@@ -33,6 +33,9 @@ import qualified Chrome.API.Page as Page
 import qualified Chrome.API.DOM as DOM
 import qualified Chrome.API.Network as Network
 
+import Control.Monad.IO.Class
+import Data.Foldable
+
 head' :: [a] -> Maybe a
 head' (x:_) = Just x
 head' _ = Nothing

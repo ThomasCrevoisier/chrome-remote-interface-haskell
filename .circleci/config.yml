@@ -57,7 +57,7 @@ jobs:
             git config user.email "ci-build@thomascrevoisier.net"
             git config user.name "ci-build"
             git add docs/
-            git commit "Update documentation"
+            git commit -m "Update documentation"
             git push --quiet origin master
 
 workflows:

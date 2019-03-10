@@ -1,5 +1,7 @@
 # chrome-remote-interface-haskell
 
+[![CircleCI](https://circleci.com/gh/ThomasCrevoisier/chrome-remote-interface-haskell/tree/master.svg?style=svg)](https://circleci.com/gh/ThomasCrevoisier/chrome-remote-interface-haskell/tree/master)
+
 A client to interact with Chrome remotely.
 
 ## Motivation
@@ -76,7 +78,7 @@ Some notes :
 
 ## Basic Roadmap
 
-The goal for the first version is to support the stable version of the protocol : https://chromedevtools.github.io/devtools-protocol/1-2/ 
+The goal for the first version is to support the stable version of the protocol : https://chromedevtools.github.io/devtools-protocol/1-2/
 
 It includes the domains :
 - [ ] DOM

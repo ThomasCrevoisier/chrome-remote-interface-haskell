@@ -12,10 +12,10 @@ jobs:
             - chrome-remote-interface-haskell--{{ checksum "package.yaml" }}-{{ checksum "stack.yaml" }}
       - run:
           name: Resolve/Update dependencies
-          command: stack setup
+          command: make setup
       - run:
           name: Build the project
-          command: stack build
+          command: make build
       - save_cache:
           name: Cache dependencies
           key: chrome-remote-interface-haskell--{{ checksum "package.yaml" }}-{{ checksum "stack.yaml" }}

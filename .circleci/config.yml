@@ -10,12 +10,18 @@ jobs:
           name: Restore cached dependencies
           keys:
             - chrome-remote-interface-haskell--{{ checksum "package.yaml" }}-{{ checksum "stack.yaml" }}
+            - stack-lts--{{ checksum "package.yaml" }}-{{ checksum "stack.yaml" }}
       - run:
           name: Resolve/Update dependencies
           command: make setup
       - run:
           name: Build the project
           command: make build
+      - save_cache:
+          name: Cache LTS modules
+          key: stack-lts--{{ checksum "package.yaml" }}-{{ checksum "stack.yaml" }}
+          paths:
+            - "/root/.stack"
       - save_cache:
           name: Cache dependencies
           key: chrome-remote-interface-haskell--{{ checksum "package.yaml" }}-{{ checksum "stack.yaml" }}
@@ -31,6 +37,7 @@ jobs:
           name: Restore cached dependencies
           keys:
             - chrome-remote-interface-haskell--{{ checksum "package.yaml" }}-{{ checksum "stack.yaml" }}
+            - stack-lts--{{ checksum "package.yaml" }}-{{ checksum "stack.yaml" }}
       - run:
           name: Resolve/Update dependencies
           command: make setup

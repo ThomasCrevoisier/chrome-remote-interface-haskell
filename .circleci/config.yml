@@ -10,7 +10,6 @@ jobs:
           name: Restore cached dependencies
           keys:
             - chrome-remote-interface-haskell--{{ checksum "package.yaml" }}-{{ checksum "stack.yaml" }}
-            - stack-lts--{{ checksum "package.yaml" }}-{{ checksum "stack.yaml" }}
       - run:
           name: Resolve/Update dependencies
           command: make setup
@@ -18,16 +17,12 @@ jobs:
           name: Build the project
           command: make build
       - save_cache:
-          name: Cache LTS modules
-          key: stack-lts--{{ checksum "package.yaml" }}-{{ checksum "stack.yaml" }}
-          paths:
-            - "/root/.stack"
-      - save_cache:
           name: Cache dependencies
           key: chrome-remote-interface-haskell--{{ checksum "package.yaml" }}-{{ checksum "stack.yaml" }}
           paths:
             - ".stack"
             - ".stack-work"
+            - "/root/.stack"
   doc-build:
     docker:
       - image: fpco/stack-build:lts
@@ -37,7 +32,6 @@ jobs:
           name: Restore cached dependencies
           keys:
             - chrome-remote-interface-haskell--{{ checksum "package.yaml" }}-{{ checksum "stack.yaml" }}
-            - stack-lts--{{ checksum "package.yaml" }}-{{ checksum "stack.yaml" }}
       - run:
           name: Resolve/Update dependencies
           command: make setup
@@ -54,6 +48,9 @@ jobs:
       - checkout
       - attach_workspace:
           at: docs/
+      - add_ssh_keys:
+          fingerprints:
+            - "d4:9d:67:ed:ea:64:65:6a:d0:f4:f5:ba:15:5f:ca:7b"
       - run:
           name: Setup git configuration
           command: |

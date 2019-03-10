@@ -22,7 +22,7 @@ jobs:
           paths:
             - ".stack"
             - ".stack-work"
-  build-doc:
+  doc-build:
     docker:
       - image: fpco/stack-build:lts
     steps:
@@ -40,10 +40,32 @@ jobs:
       - persist_to_workspace:
           root: docs/
           paths: .
+  doc-deploy:
+    docker:
+      - image: node:8.10.0
+    steps:
+      - checkout
+      - attach_workspace:
+          at: docs/
+      - run:
+          name: Setup git configuration
+          command: |
+            git config user.email "ci-build@thomascrevoisier.net"
+            git config user.name "ci-build"
+            git add docs/
+            git commit "Update documentation"
+            git push --quiet origin master
 
 workflows:
   version: 2
   build:
     jobs:
       - build
-      - build-doc
+      - doc-build
+      - doc-deploy:
+          requires:
+            - build
+            - doc-build
+          filters:
+            branches:
+              only: master

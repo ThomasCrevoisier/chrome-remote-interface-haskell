@@ -7,9 +7,9 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-        name: Restore cached dependencies
-        keys:
-          - chrome-remote-interface-haskell--{{ checksum "package.yaml" }}-{{ checksum "stack.yaml" }}
+          name: Restore cached dependencies
+          keys:
+            - chrome-remote-interface-haskell--{{ checksum "package.yaml" }}-{{ checksum "stack.yaml" }}
       - run:
           name: Resolve/Update dependencies
           command: stack setup

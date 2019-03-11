@@ -473,6 +473,33 @@ instance Data.Aeson.Types.ToJSON.ToJSON Chrome.API.Page.Types.PageReloadParams
 instance Data.Aeson.Types.FromJSON.FromJSON Chrome.API.Page.Types.PageReloadParams
 instance GHC.Show.Show Chrome.API.Page.Types.PageReloadParams
 
+
+-- | |
+module Chrome.Launcher
+data ChromeConfig
+ChromeConfig :: String -> Int -> ChromeConfig
+
+-- | Path to the Google Chrome executable
+[chromeExecutablePath] :: ChromeConfig -> String
+
+-- | Port for using the remote debugging protocol
+[chromeRemoteDebuggingPort] :: ChromeConfig -> Int
+
+-- | Default configuration for launching "google-chrome" with the remote
+--   debugging port set to 9222
+defaultConfig :: ChromeConfig
+
+-- | Spawn Google Chrome using the provided config, execute an action and
+--   close the browser once the action is done
+--   
+--   Example:
+--   
+--   <pre>
+--   &gt;&gt;&gt; withChrome defaultConfig (\_ -&gt; putStrLn "Chrome started !")
+--   </pre>
+withChrome :: ChromeConfig -> (ChromeConfig -> IO a) -> IO a
+instance Data.Default.Class.Default Chrome.Launcher.ChromeConfig
+
 module Chrome.Target.DebuggingURL
 newtype DebuggingURL
 DebuggingURL :: URL -> DebuggingURL

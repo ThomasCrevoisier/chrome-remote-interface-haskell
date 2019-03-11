@@ -52,13 +52,8 @@ jobs:
           fingerprints:
             - "d4:9d:67:ed:ea:64:65:6a:d0:f4:f5:ba:15:5f:ca:7b"
       - run:
-          name: Setup git configuration
-          command: |
-            git config user.email "ci-build@thomascrevoisier.net"
-            git config user.name "ci-build"
-            git add docs/
-            git commit -m "Update documentation"
-            git push --quiet origin master
+          name: Deploy documentation
+          command: "./scripts/ci/deploy-docs.sh"
 
 workflows:
   version: 2

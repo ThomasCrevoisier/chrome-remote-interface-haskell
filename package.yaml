@@ -24,6 +24,7 @@ library:
   - base64-bytestring
   - bytestring
   - containers
+  - data-default
   - http-client
   - lifted-async
   - mtl
@@ -34,5 +35,6 @@ library:
   - template-haskell
   - text
   - transformers
+  - typed-process
   - url
   - websockets

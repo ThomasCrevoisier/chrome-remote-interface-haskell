@@ -31,7 +31,7 @@ jobs:
       - restore_cache:
           name: Restore cached dependencies
           keys:
-            - chrome-remote-interface-haskell--{{ checksum "package.yaml" }}-{{ checksum "stack.yaml" }}-v1
+            - chrome-remote-interface-haskell-doc--{{ checksum "package.yaml" }}-{{ checksum "stack.yaml" }}-v1
       - run:
           name: Resolve/Update dependencies
           command: make setup
@@ -40,7 +40,7 @@ jobs:
           command: make build-doc
       - save_cache:
           name: Cache dependencies
-          key: chrome-remote-interface-haskell--{{ checksum "package.yaml" }}-{{ checksum "stack.yaml" }}-v1
+          key: chrome-remote-interface-haskell-doc--{{ checksum "package.yaml" }}-{{ checksum "stack.yaml" }}-v1
           paths:
             - ".stack"
             - ".stack-work"

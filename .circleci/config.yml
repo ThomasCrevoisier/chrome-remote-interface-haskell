@@ -38,6 +38,13 @@ jobs:
       - run:
           name: Build the project documentation
           command: make build-doc
+      - save_cache:
+          name: Cache dependencies
+          key: chrome-remote-interface-haskell--{{ checksum "package.yaml" }}-{{ checksum "stack.yaml" }}-v1
+          paths:
+            - ".stack"
+            - ".stack-work"
+            - "/root/.stack"
       - persist_to_workspace:
           root: docs/
           paths: .

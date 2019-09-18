@@ -4,4 +4,4 @@
 
 A client to interact with Chrome remotely.
 
-:warning: There is massive rewrite coming and it will probably break compatibility :warning:
+:warning: **NOT MAINTAINED** Feel free to fork this project :warning:

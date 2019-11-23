@@ -1,11 +1,16 @@
 {-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE OverloadedStrings     #-}
 {-# LANGUAGE TemplateHaskell       #-}
+{-# LANGUAGE DerivingVia       #-}
+{-# LANGUAGE DeriveGeneric       #-}
 
 module Chrome.API.DOM.Types where
 
+import GHC.Generics (Generic)
 import           Data.Aeson
 import           Data.Aeson.TH
+
+import Chrome.Target.Message.Aeson (FromJSONMessage(..), ToJSONMessage(..))
 
 data RequestChildNodesParams = RequestChildNodesParams
                                {
@@ -17,9 +22,10 @@ $(deriveJSON defaultOptions{ omitNothingFields = True } ''RequestChildNodesParam
 
 data QuerySelectorParam = QuerySelectorParam { nodeId   :: Int
                                              , selector :: String
-                                             } deriving Show
-
-$(deriveJSON defaultOptions{ omitNothingFields = True } ''QuerySelectorParam)
+                                             }
+                                             deriving (Show, Generic)
+                                             deriving FromJSON via (FromJSONMessage QuerySelectorParam)
+                                             deriving ToJSON via (ToJSONMessage QuerySelectorParam)
 
 data QuerySelectorResponse = QuerySelectorResponse { _rNodeId :: Int } deriving Show
 
